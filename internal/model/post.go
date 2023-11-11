@@ -1,7 +1,7 @@
 package model
 
 type Post struct {
-	Model
+	BaseModel
 	Title string `json:"title"`
 	Text  string `json:"text"`
 }

@@ -6,13 +6,13 @@ import (
 	"github.com/MehmetTalhaSeker/mts-blog-api/internal/types"
 )
 
-type Model struct {
+type BaseModel struct {
 	ID        uint64       `json:"id"`
-	CreatedAt time.Time    `json:"createdAt"`
-	UpdatedAt time.Time    `json:"updatedAt"`
-	DeletedAt *time.Time   `json:"deletedAt"`
+	CreatedAt time.Time    `json:"created_at"`
+	UpdatedAt time.Time    `json:"updated_at"`
+	DeletedAt *time.Time   `json:"deleted_at"`
 	Status    types.Status `json:"status"`
-	CreatedBy string       `json:"createdBy"`
-	UpdatedBy string       `json:"updatedBy"`
-	DeletedBy string       `json:"deletedBy"`
+	CreatedBy string       `json:"created_by"`
+	UpdatedBy string       `json:"updated_by"`
+	DeletedBy string       `json:"deleted_by"`
 }

@@ -1,14 +1,17 @@
 package main
 
 import (
+	"database/sql"
 	"log"
-	"net/http"
-
-	"github.com/labstack/echo/v4"
 
 	"github.com/MehmetTalhaSeker/mts-blog-api/internal/database"
 	"github.com/MehmetTalhaSeker/mts-blog-api/internal/shared/config"
 )
+
+type application struct {
+	config *config.Config
+	db     *sql.DB
+}
 
 func main() {
 	// Initialize application configs.
@@ -26,9 +29,11 @@ func main() {
 		log.Fatal(err)
 	}
 
-	e := echo.New()
-	e.GET("/", func(c echo.Context) error {
-		return c.String(http.StatusOK, "Hello, World!")
-	})
-	e.Logger.Fatal(e.Start(":1323"))
+	app := &application{
+		config: cfg,
+		db:     store.DB,
+	}
+
+	log.Printf("starting server on %s:%s (version %s)", cfg.Rest.Host, cfg.Rest.Port, cfg.Rest.Version)
+	app.start()
 }

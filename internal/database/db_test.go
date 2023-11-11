@@ -72,5 +72,5 @@ func TestNewPostgresStore(t *testing.T) {
 		t.Fatalf("NewPostgresStore returned a nil store")
 	}
 
-	defer store.db.Close()
+	defer store.DB.Close()
 }

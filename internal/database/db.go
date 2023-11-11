@@ -49,11 +49,11 @@ func WithPort(p string) OptsFunc {
 	}
 }
 
-type PostgresStore struct {
-	db *sql.DB
+type Store struct {
+	DB *sql.DB
 }
 
-func NewPostgresStore(opts ...OptsFunc) (*PostgresStore, error) {
+func NewPostgresStore(opts ...OptsFunc) (*Store, error) {
 	o := defaultOpts()
 	for _, fn := range opts {
 		fn(&o)
@@ -70,22 +70,24 @@ func NewPostgresStore(opts ...OptsFunc) (*PostgresStore, error) {
 		return nil, err
 	}
 
-	return &PostgresStore{db: db}, nil
+	return &Store{DB: db}, nil
 }
 
-func (p PostgresStore) Init() error {
-	return p.createUsersTable()
+func (s Store) Init() error {
+	return s.createUsersTable()
 }
 
-func (p PostgresStore) createUsersTable() error {
+func (s Store) createUsersTable() error {
 	query := `create table if not exists users (
     id serial primary key,
     encrypted_password varchar(500), 
+    username varchar(21), 
+    email varchar(55), 
     created_at timestamp,
     updated_at timestamp
 	)`
 
-	_, err := p.db.Exec(query)
+	_, err := s.DB.Exec(query)
 
 	return err
 }
