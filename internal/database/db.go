@@ -80,9 +80,9 @@ func (s Store) Init() error {
 func (s Store) createUsersTable() error {
 	query := `create table if not exists users (
     id serial primary key,
-    encrypted_password varchar(500), 
-    username varchar(21), 
-    email varchar(55), 
+    encrypted_password varchar(500) NOT NULL, 
+    username varchar(21) NOT NULL UNIQUE, 
+    email varchar(55) NOT NULL UNIQUE, 
     created_at timestamp,
     updated_at timestamp
 	)`

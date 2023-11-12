@@ -4,6 +4,7 @@ type Role string
 
 var (
 	Admin      Role = "admin"
+	Mod        Role = "mod"
 	Registered Role = "registered"
 )
 

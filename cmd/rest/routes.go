@@ -9,6 +9,7 @@ import (
 
 	"github.com/MehmetTalhaSeker/mts-blog-api/internal/utils/errorutils"
 	"github.com/MehmetTalhaSeker/mts-blog-api/internal/utils/validatorutils"
+	"github.com/MehmetTalhaSeker/mts-blog-api/pkg/auth"
 	"github.com/MehmetTalhaSeker/mts-blog-api/pkg/user"
 )
 
@@ -33,10 +34,18 @@ func (app *application) start() {
 
 	// user router initialization.
 	userRouter := &user.Router{
-		RouterGroup: routerGroup,
-		DB:          app.db,
+		Authenticate: app.authenticate(),
+		DB:           app.db,
+		RouterGroup:  routerGroup,
 	}
 	userRouter.New()
+
+	// auth router initialization.
+	authRouter := &auth.Router{
+		DB:          app.db,
+		RouterGroup: routerGroup,
+	}
+	authRouter.New()
 
 	e.Logger.Fatal(e.Start(fmt.Sprintf(":%s", app.config.Rest.Port)))
 }

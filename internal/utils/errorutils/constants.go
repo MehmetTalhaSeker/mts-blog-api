@@ -12,6 +12,7 @@ const (
 	ErrCodeShortUsername        = "auth/short-username"
 	ErrCodeUserDisabled         = "auth/user-disabled"
 	ErrCodeUserNotFound         = "auth/user-not-found"
+	ErrCodeEmailNotFound        = "auth/email-not-found"
 	ErrCodeUsernameAlreadyTaken = "auth/username-taken"
 	ErrCodeUsernameRequired     = "auth/username-required"
 	ErrCodeWeakPassword         = "auth/weak-password"
@@ -51,11 +52,11 @@ const (
 
 // Unorganized Error Codes.
 const (
-	ErrCodeFailedRead              = "un/read-failed"
-	ErrCodeFailedSave              = "un/save-failed"
-	ErrCodeInvalidPasswordUsername = "un/invalid"
-	ErrCodeInvalidQueryParam       = "un/"
-	ErrCodeInvalidRequest          = "un/invalid-request"
-	ErrCodeInvalidRole             = "un/"
-	ErrCodeUnauthorized            = "un/"
+	ErrCodeFailedRead        = "un/read-failed"
+	ErrCodeFailedSave        = "un/save-failed"
+	ErrCodeInvalidPassword   = "un/invalid"
+	ErrCodeInvalidQueryParam = "un/"
+	ErrCodeInvalidRequest    = "un/invalid-request"
+	ErrCodeInvalidRole       = "un/"
+	ErrCodeUnauthorized      = "un/"
 )

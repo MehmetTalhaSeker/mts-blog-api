@@ -7,8 +7,9 @@ import (
 )
 
 type Router struct {
-	RouterGroup *echo.Group
-	DB          *sql.DB
+	Authenticate echo.MiddlewareFunc
+	DB           *sql.DB
+	RouterGroup  *echo.Group
 }
 
 func (r *Router) New() {
@@ -16,7 +17,7 @@ func (r *Router) New() {
 	us := NewService(ur)
 	uh := NewHandler(us)
 
-	ugr := r.RouterGroup.Group("/users")
+	ugr := r.RouterGroup.Group("/users", r.Authenticate)
 
 	ugr.POST("", uh.Create())
 }

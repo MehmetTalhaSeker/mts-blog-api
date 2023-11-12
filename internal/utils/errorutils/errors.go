@@ -17,6 +17,7 @@ var (
 	ErrShortPassword        = errors.New("password too short")
 	ErrShortUsername        = errors.New("username too short")
 	ErrUserNotFound         = errors.New("user not found")
+	ErrEmailNotFound        = errors.New("email not found")
 	ErrUsernameAlreadyTaken = errors.New("username already taken")
 	ErrUsernameRequired     = errors.New("username is required")
 )
@@ -49,13 +50,13 @@ var (
 
 // Unorganized Errors.
 var (
-	ErrFailedRead              = errors.New("we couldn't read your request. Please try again")
-	ErrFailedSave              = errors.New("we couldn't save your request. Please try again")
-	ErrInvalidPasswordUsername = errors.New("username or password invalid")
-	ErrInvalidQueryParam       = errors.New("your requested query params are invalid. Please try again")
-	ErrInvalidRequest          = errors.New("invalid request")
-	ErrInvalidRole             = errors.New("invalid role")
-	ErrUnauthorized            = errors.New("unauthorized user")
+	ErrFailedRead        = errors.New("we couldn't read your request. Please try again")
+	ErrFailedSave        = errors.New("we couldn't save your request. Please try again")
+	ErrInvalidPassword   = errors.New("wrong password")
+	ErrInvalidQueryParam = errors.New("your requested query params are invalid. Please try again")
+	ErrInvalidRequest    = errors.New("invalid request")
+	ErrInvalidRole       = errors.New("invalid role")
+	ErrUnauthorized      = errors.New("unauthorized user")
 )
 
 // errorCodes a map to store error codes.
@@ -70,6 +71,7 @@ var errorCodes = map[error]string{
 	ErrShortPassword:        ErrCodeShortPassword,
 	ErrShortUsername:        ErrCodeShortUsername,
 	ErrUserNotFound:         ErrCodeUserNotFound,
+	ErrEmailNotFound:        ErrCodeEmailNotFound,
 	ErrUsernameAlreadyTaken: ErrCodeUsernameAlreadyTaken,
 	ErrUsernameRequired:     ErrCodeUsernameRequired,
 
@@ -95,13 +97,13 @@ var errorCodes = map[error]string{
 	ErrUserUpdate: ErrCodeUserUpdate,
 
 	// Others
-	ErrFailedRead:              ErrCodeFailedRead,
-	ErrFailedSave:              ErrCodeFailedSave,
-	ErrInvalidPasswordUsername: ErrCodeInvalidPasswordUsername,
-	ErrInvalidQueryParam:       ErrCodeInvalidQueryParam,
-	ErrInvalidRequest:          ErrCodeInvalidRequest,
-	ErrInvalidRole:             ErrCodeInvalidRole,
-	ErrUnauthorized:            ErrCodeUnauthorized,
+	ErrFailedRead:        ErrCodeFailedRead,
+	ErrFailedSave:        ErrCodeFailedSave,
+	ErrInvalidPassword:   ErrCodeInvalidPassword,
+	ErrInvalidQueryParam: ErrCodeInvalidQueryParam,
+	ErrInvalidRequest:    ErrCodeInvalidRequest,
+	ErrInvalidRole:       ErrCodeInvalidRole,
+	ErrUnauthorized:      ErrCodeUnauthorized,
 }
 
 // Code gets machine-readable error code from error.
@@ -127,6 +129,7 @@ var statusCodeMap = map[string]int{
 	ErrCodeUnauthorized:         http.StatusUnauthorized,
 	ErrCodeUserDisabled:         http.StatusUnauthorized,
 	ErrCodeUserNotFound:         http.StatusUnauthorized,
+	ErrCodeEmailNotFound:        http.StatusUnauthorized,
 	ErrCodeUsernameAlreadyTaken: http.StatusBadRequest,
 	ErrCodeUsernameRequired:     http.StatusBadRequest,
 	ErrCodeWeakPassword:         http.StatusBadRequest,

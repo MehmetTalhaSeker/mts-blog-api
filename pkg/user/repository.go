@@ -4,6 +4,7 @@ import (
 	"database/sql"
 
 	"github.com/MehmetTalhaSeker/mts-blog-api/internal/model"
+	"github.com/MehmetTalhaSeker/mts-blog-api/internal/utils/errorutils"
 )
 
 type Repository interface {
@@ -27,8 +28,8 @@ func (r *repository) Create(u *model.User) error {
 
 	_, err := r.db.Query(query, u.Email, u.Username, u.EncryptedPassword, u.CreatedAt, u.UpdatedAt)
 	if err != nil {
-		return err
+		return errorutils.New(errorutils.ErrUserCreate, err)
 	}
 
-	return err
+	return nil
 }

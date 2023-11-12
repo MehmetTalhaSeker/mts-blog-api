@@ -1,6 +1,7 @@
 ### Create User
 POST {{host}}/users
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImNlbWFsc0BjZW1hbG92LmNvbSIsImV4cGlyZXNBdCI6MTUwMDAsInJvbGUiOiIiLCJ1aWQiOjYsInVzZXJuYW1lIjoiY2VzbWFsIn0.2mBNBcnNznTQZ6uCrT59Q4OlQqn7BhO-Qo0eRS8s5TI
 
 {
   "email": "kamil@kamilov.com",
