@@ -2,6 +2,7 @@ package main
 
 import (
 	"database/sql"
+	"github.com/MehmetTalhaSeker/mts-blog-api/internal/rbac"
 	"log"
 
 	"github.com/MehmetTalhaSeker/mts-blog-api/internal/database"
@@ -11,6 +12,7 @@ import (
 type application struct {
 	config *config.Config
 	db     *sql.DB
+	rbac   rbac.RBAC
 }
 
 func main() {
@@ -29,9 +31,12 @@ func main() {
 		log.Fatal(err)
 	}
 
+	rb := rbac.New()
+
 	app := &application{
 		config: cfg,
 		db:     store.DB,
+		rbac:   rb,
 	}
 
 	log.Printf("starting server on %s:%s (version %s)", cfg.Rest.Host, cfg.Rest.Port, cfg.Rest.Version)

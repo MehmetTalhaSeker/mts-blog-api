@@ -50,7 +50,7 @@ func (r repository) ReadByEmail(email string) (*model.User, error) {
 
 func scanIntoUser(rows *sql.Rows) (*model.User, error) {
 	u := new(model.User)
-	err := rows.Scan(&u.ID, &u.EncryptedPassword, &u.Username, &u.Email, &u.CreatedAt, &u.UpdatedAt)
+	err := rows.Scan(&u.ID, &u.EncryptedPassword, &u.Username, &u.Email, &u.Role, &u.CreatedAt, &u.UpdatedAt)
 
 	return u, err
 }

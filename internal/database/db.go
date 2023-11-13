@@ -74,17 +74,38 @@ func NewPostgresStore(opts ...OptsFunc) (*Store, error) {
 }
 
 func (s Store) Init() error {
-	return s.createUsersTable()
+	if err := s.createUsersEnumRoles(); err != nil {
+		return err
+	}
+
+	if err := s.createUsersTable(); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (s Store) createUsersEnumRoles() error {
+	query := `DO $$ BEGIN
+	IF to_regtype('user_roles') IS NULL THEN
+	CREATE TYPE user_roles AS ENUM('admin', 'mod', 'registered');
+	END IF;
+	END $$;`
+
+	_, err := s.DB.Exec(query)
+
+	return err
 }
 
 func (s Store) createUsersTable() error {
-	query := `create table if not exists users (
-    id serial primary key,
+	query := `CREATE TABLE IF NOT EXISTS users (
+    id serial 		   primary key,
     encrypted_password varchar(500) NOT NULL, 
-    username varchar(21) NOT NULL UNIQUE, 
-    email varchar(55) NOT NULL UNIQUE, 
-    created_at timestamp,
-    updated_at timestamp
+    username 		   varchar(21) NOT NULL UNIQUE, 
+    email 			   varchar(55) NOT NULL UNIQUE,
+	user_role     		   user_roles,
+    created_at 		   timestamp,
+    updated_at 		   timestamp
 	)`
 
 	_, err := s.DB.Exec(query)

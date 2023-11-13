@@ -36,6 +36,7 @@ func (app *application) start() {
 	userRouter := &user.Router{
 		Authenticate: app.authenticate(),
 		DB:           app.db,
+		RBAC:         app.rbac,
 		RouterGroup:  routerGroup,
 	}
 	userRouter.New()
