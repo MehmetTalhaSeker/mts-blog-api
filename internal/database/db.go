@@ -103,7 +103,7 @@ func (s Store) createUsersTable() error {
     encrypted_password varchar(500) NOT NULL, 
     username 		   varchar(21) NOT NULL UNIQUE, 
     email 			   varchar(55) NOT NULL UNIQUE,
-	user_role     		   user_roles,
+	user_role     	   user_roles,
     created_at 		   timestamp,
     updated_at 		   timestamp
 	)`

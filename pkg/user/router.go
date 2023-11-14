@@ -2,10 +2,11 @@ package user
 
 import (
 	"database/sql"
-	"github.com/MehmetTalhaSeker/mts-blog-api/internal/rbac"
-	"github.com/MehmetTalhaSeker/mts-blog-api/internal/types"
 
 	"github.com/labstack/echo/v4"
+
+	"github.com/MehmetTalhaSeker/mts-blog-api/internal/rbac"
+	"github.com/MehmetTalhaSeker/mts-blog-api/internal/types"
 )
 
 type Router struct {

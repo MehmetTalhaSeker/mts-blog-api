@@ -11,6 +11,7 @@ import (
 
 type Handler interface {
 	Login() echo.HandlerFunc
+	Register() echo.HandlerFunc
 }
 
 type handler struct {
@@ -30,11 +31,27 @@ func (h *handler) Login() echo.HandlerFunc {
 			return err
 		}
 
-		u, err := h.service.Login(r)
+		resp, err := h.service.Login(r)
 		if err != nil {
 			return err
 		}
 
-		return c.JSON(http.StatusOK, u)
+		return c.JSON(http.StatusOK, resp)
+	}
+}
+
+func (h *handler) Register() echo.HandlerFunc {
+	return func(c echo.Context) error {
+		r := new(dto.RegisterRequest)
+		if err := echoutils.BindAndValidate(c, r); err != nil {
+			return err
+		}
+
+		resp, err := h.service.Register(r)
+		if err != nil {
+			return err
+		}
+
+		return c.JSON(http.StatusOK, resp)
 	}
 }

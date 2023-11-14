@@ -5,6 +5,7 @@ const (
 	ErrCodeEmailAlreadyTaken    = "auth/email-taken"
 	ErrCodeEmailRequired        = "auth/email-required"
 	ErrCodeInvalidToken         = "auth/invalid-token"
+	ErrCodeExpiredToken         = "auth/expired-token"
 	ErrCodeLongPassword         = "auth/long-password"
 	ErrCodeLongUsername         = "auth/long-username"
 	ErrCodeMissingAuthHeader    = "auth/missing-header"

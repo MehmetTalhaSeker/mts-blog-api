@@ -16,7 +16,15 @@ type LoginRequest struct {
 	Password string `json:"password"       validate:"required,min=6,max=55"`
 }
 
-// LoginResponse is the response body for the user login endpoint.
-type LoginResponse struct {
+// RegisterRequest is the request body for the user register endpoint.
+type RegisterRequest struct {
+	Email          string `json:"email"          validate:"required,email"`
+	Password       string `json:"password"       validate:"required,min=6,max=55"`
+	Username       string `json:"username"       validate:"required,min=3,max=30"`
+	TermsOfService bool   `json:"termsOfService" validate:"required"`
+}
+
+// WithTokenResponse is the response body for the user login endpoint.
+type WithTokenResponse struct {
 	Token string `json:"token"`
 }

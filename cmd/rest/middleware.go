@@ -4,14 +4,17 @@ import (
 	"fmt"
 	"os"
 	"strings"
+	"time"
 
 	"github.com/golang-jwt/jwt"
 	"github.com/labstack/echo/v4"
 
 	"github.com/MehmetTalhaSeker/mts-blog-api/internal/appcontext"
 	"github.com/MehmetTalhaSeker/mts-blog-api/internal/dto"
+	"github.com/MehmetTalhaSeker/mts-blog-api/internal/types"
 	"github.com/MehmetTalhaSeker/mts-blog-api/internal/utils/apputils"
 	"github.com/MehmetTalhaSeker/mts-blog-api/internal/utils/errorutils"
+	"github.com/MehmetTalhaSeker/mts-blog-api/pkg/user"
 )
 
 func (app *application) authenticate() echo.MiddlewareFunc {
@@ -34,6 +37,20 @@ func (app *application) authenticate() echo.MiddlewareFunc {
 				return errorutils.New(errorutils.ErrUnauthorized, err)
 			}
 
+			dts, ok := mc["expiresAt"].(string)
+			if !ok {
+				return errorutils.New(errorutils.ErrInvalidToken, err)
+			}
+
+			exp, err := time.Parse(time.RFC3339, dts)
+			if err != nil {
+				return errorutils.New(errorutils.ErrInvalidToken, err)
+			}
+
+			if exp.Unix() < time.Now().Unix() {
+				return errorutils.New(errorutils.ErrExpiredToken, err)
+			}
+
 			claims := &dto.Claims{}
 
 			err = apputils.InterfaceToStruct(mc, claims)
@@ -41,49 +58,15 @@ func (app *application) authenticate() echo.MiddlewareFunc {
 				return err
 			}
 
-			fmt.Println(claims)
+			ur := user.NewRepository(app.db)
+			u, err := ur.Read(claims.UID)
+			if err != nil {
+				return err
+			}
 
-			//acc, err := s.GetAccountByID(id)
-			//if err != nil {
-			//	return errorutils.New(errorutils.ErrUserNotFound, err)
-			//}
-			//
-			//
-			//uc, ok := idToken.Claims["lu"]
-			//
-			//claims := &dto.Claims{}
-			//
-			//if ok {
-			//	err = apputils.InterfaceToStruct(lu, claims)
-			//	if err != nil {
-			//		return err
-			//	}
-			//} else {
-			//	fu, err := app.auth.GetUser(c.Request().Context(), idToken.UID)
-			//	if err != nil {
-			//		return errorutils.New(errorutils.ErrInvalidToken, err)
-			//	}
-			//
-			//	var u *model.User
-			//
-			//	u, err = app.auth.VerifyUser(c.Request().Context(), idToken.Subject)
-			//	if err != nil {
-			//		return errorutils.New(errorutils.ErrUserNotFound, err)
-			//	}
-			//
-			//	claims.UID = u.ID
-			//	claims.Role = u.Role
-			//	claims.Username = u.Username
-			//
-			//	if claims.Role == types.Disabled {
-			//		return errorutils.New(errorutils.ErrUserDisabled, err)
-			//	}
-			//
-			//	if claims == nil || claims.LID == "" {
-			//		return errorutils.New(errorutils.ErrUserNotFound, err)
-			//	}
-			//}
-			//
+			if u.Role != claims.Role || u.Status == types.Passive {
+				return errorutils.New(errorutils.ErrInvalidRequest, nil)
+			}
 
 			// Use custom context functions to store values
 			ctx := appcontext.WithMtsBlogUser(c.Request().Context(), claims)

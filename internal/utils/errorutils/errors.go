@@ -11,6 +11,7 @@ var (
 	ErrEmailAlreadyTaken    = errors.New("email already taken")
 	ErrEmailRequired        = errors.New("email is required")
 	ErrInvalidToken         = errors.New("invalid token")
+	ErrExpiredToken         = errors.New("expired token")
 	ErrLongPassword         = errors.New("password should be less then 55")
 	ErrLongUsername         = errors.New("username  should be less then 21")
 	ErrMissingAuthHeader    = errors.New("missing authorization header")
@@ -65,6 +66,7 @@ var errorCodes = map[error]string{
 	ErrEmailAlreadyTaken:    ErrCodeEmailAlreadyTaken,
 	ErrEmailRequired:        ErrCodeEmailRequired,
 	ErrInvalidToken:         ErrCodeInvalidToken,
+	ErrExpiredToken:         ErrCodeExpiredToken,
 	ErrLongPassword:         ErrCodeLongPassword,
 	ErrLongUsername:         ErrCodeLongUsername,
 	ErrMissingAuthHeader:    ErrCodeMissingAuthHeader,
@@ -120,6 +122,7 @@ var statusCodeMap = map[string]int{
 	ErrCodeEmailAlreadyTaken:    http.StatusBadRequest,
 	ErrCodeEmailRequired:        http.StatusBadRequest,
 	ErrCodeInvalidToken:         http.StatusUnauthorized,
+	ErrCodeExpiredToken:         http.StatusUnauthorized,
 	ErrCodeInvalidRequest:       http.StatusBadRequest,
 	ErrCodeLongPassword:         http.StatusBadRequest,
 	ErrCodeLongUsername:         http.StatusBadRequest,

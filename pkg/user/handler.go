@@ -1,12 +1,10 @@
 package user
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/labstack/echo/v4"
 
-	"github.com/MehmetTalhaSeker/mts-blog-api/internal/appcontext"
 	"github.com/MehmetTalhaSeker/mts-blog-api/internal/dto"
 	"github.com/MehmetTalhaSeker/mts-blog-api/internal/utils/echoutils"
 )
@@ -32,16 +30,7 @@ func (h *handler) Create() echo.HandlerFunc {
 			return err
 		}
 
-		ctx := c.Request().Context()
-
-		claim, err := appcontext.MtsBlogUser(ctx)
-		if err != nil {
-			return err
-		}
-
-		fmt.Println(claim)
-
-		u, err := h.service.Create(ctx, r)
+		u, err := h.service.Create(r)
 		if err != nil {
 			return err
 		}

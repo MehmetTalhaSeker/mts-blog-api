@@ -2,10 +2,10 @@ package main
 
 import (
 	"database/sql"
-	"github.com/MehmetTalhaSeker/mts-blog-api/internal/rbac"
 	"log"
 
 	"github.com/MehmetTalhaSeker/mts-blog-api/internal/database"
+	"github.com/MehmetTalhaSeker/mts-blog-api/internal/rbac"
 	"github.com/MehmetTalhaSeker/mts-blog-api/internal/shared/config"
 )
 
@@ -31,6 +31,7 @@ func main() {
 		log.Fatal(err)
 	}
 
+	// Initialize Role based access control.
 	rb := rbac.New()
 
 	app := &application{

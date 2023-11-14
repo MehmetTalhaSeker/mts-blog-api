@@ -1,32 +1,35 @@
 package auth
 
 import (
-	"os"
+	"time"
 
-	"github.com/golang-jwt/jwt"
 	"golang.org/x/crypto/bcrypt"
 
 	"github.com/MehmetTalhaSeker/mts-blog-api/internal/dto"
 	"github.com/MehmetTalhaSeker/mts-blog-api/internal/model"
+	"github.com/MehmetTalhaSeker/mts-blog-api/internal/types"
+	"github.com/MehmetTalhaSeker/mts-blog-api/internal/utils/apputils"
 	"github.com/MehmetTalhaSeker/mts-blog-api/internal/utils/errorutils"
+	"github.com/MehmetTalhaSeker/mts-blog-api/pkg/user"
 )
 
 type Service interface {
-	Login(req *dto.LoginRequest) (*dto.LoginResponse, error)
+	Login(*dto.LoginRequest) (*dto.WithTokenResponse, error)
+	Register(*dto.RegisterRequest) (*dto.WithTokenResponse, error)
 }
 
 type service struct {
-	repository Repository
+	userRepository user.Repository
 }
 
-func NewService(repository Repository) Service {
+func NewService(repository user.Repository) Service {
 	return &service{
-		repository: repository,
+		userRepository: repository,
 	}
 }
 
-func (s *service) Login(req *dto.LoginRequest) (*dto.LoginResponse, error) {
-	u, err := s.repository.ReadByEmail(req.Email)
+func (s *service) Login(req *dto.LoginRequest) (*dto.WithTokenResponse, error) {
+	u, err := s.userRepository.ReadByEmail(req.Email)
 	if err != nil {
 		return nil, err
 	}
@@ -35,29 +38,47 @@ func (s *service) Login(req *dto.LoginRequest) (*dto.LoginResponse, error) {
 		return nil, errorutils.New(errorutils.ErrInvalidPassword, err)
 	}
 
-	token, err := createJWT(u)
+	token, err := apputils.CreateJWT(u)
 	if err != nil {
 		return nil, errorutils.New(errorutils.ErrUnexpected, err)
 	}
 
-	resp := dto.LoginResponse{
+	resp := dto.WithTokenResponse{
 		Token: token,
 	}
 
 	return &resp, nil
 }
 
-func createJWT(u *model.User) (string, error) {
-	claims := &jwt.MapClaims{
-		"expiresAt": 15000,
-		"email":     u.Email,
-		"username":  u.Username,
-		"role":      u.Role,
-		"uid":       u.ID,
+func (s *service) Register(req *dto.RegisterRequest) (*dto.WithTokenResponse, error) {
+	var u model.User
+
+	ep, err := apputils.EncryptPassword(req.Password)
+	if err != nil {
+		return nil, errorutils.New(errorutils.ErrUnexpected, err)
 	}
 
-	secret := os.Getenv("JWT_SECRET")
-	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+	u.CreatedAt = time.Now()
+	u.EncryptedPassword = ep
+	u.Email = req.Email
+	u.Role = types.Registered
+	u.Status = types.Active
+	u.UpdatedAt = time.Now()
+	u.Username = req.Username
 
-	return token.SignedString([]byte(secret))
+	err = s.userRepository.Create(&u)
+	if err != nil {
+		return nil, err
+	}
+
+	token, err := apputils.CreateJWT(&u)
+	if err != nil {
+		return nil, errorutils.New(errorutils.ErrUnexpected, err)
+	}
+
+	resp := dto.WithTokenResponse{
+		Token: token,
+	}
+
+	return &resp, nil
 }
