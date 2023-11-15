@@ -82,6 +82,14 @@ func (s Store) Init() error {
 		return err
 	}
 
+	if err := s.createPostsTable(); err != nil {
+		return err
+	}
+
+	if err := s.createCommentsTable(); err != nil {
+		return err
+	}
+
 	return nil
 }
 
@@ -90,7 +98,8 @@ func (s Store) createUsersEnumRoles() error {
 	IF to_regtype('user_roles') IS NULL THEN
 	CREATE TYPE user_roles AS ENUM('admin', 'mod', 'registered');
 	END IF;
-	END $$;`
+	END $$;
+	`
 
 	_, err := s.DB.Exec(query)
 
@@ -99,11 +108,41 @@ func (s Store) createUsersEnumRoles() error {
 
 func (s Store) createUsersTable() error {
 	query := `CREATE TABLE IF NOT EXISTS users (
-    id serial 		   primary key,
+    id				   serial PRIMARY KEY,
     encrypted_password varchar(500) NOT NULL, 
     username 		   varchar(21) NOT NULL UNIQUE, 
     email 			   varchar(55) NOT NULL UNIQUE,
 	user_role     	   user_roles,
+    created_at 		   timestamp,
+    updated_at 		   timestamp
+	)`
+
+	_, err := s.DB.Exec(query)
+
+	return err
+}
+
+func (s Store) createPostsTable() error {
+	query := `CREATE TABLE IF NOT EXISTS posts (
+    id 				   serial PRIMARY KEY,
+    title 			   varchar(255),
+	body 			   varchar, 
+    created_at 		   timestamp,
+    updated_at 		   timestamp
+	)`
+
+	_, err := s.DB.Exec(query)
+
+	return err
+}
+
+func (s Store) createCommentsTable() error {
+	query := `CREATE TABLE IF NOT EXISTS comments (
+    id 				   serial PRIMARY KEY,
+    text 			   varchar(255),
+	author 			   varchar references users(username), 
+	user_id 		   int references users(id),
+	post_id 		   int references posts(id),
     created_at 		   timestamp,
     updated_at 		   timestamp
 	)`

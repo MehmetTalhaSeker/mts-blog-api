@@ -12,6 +12,8 @@ type Repository interface {
 	Create(user *model.User) error
 	Read(id uint64) (*model.User, error)
 	ReadByEmail(email string) (*model.User, error)
+	Update(u *model.User) error
+	Delete(i uint64) error
 }
 
 type repository struct {
@@ -71,4 +73,22 @@ func (r *repository) ReadByEmail(e string) (*model.User, error) {
 	}
 
 	return nil, errorutils.New(errorutils.ErrEmailNotFound, errorutils.ErrUserRead)
+}
+
+func (r *repository) Update(u *model.User) error {
+	_, err := r.db.Query("UPDATE users SET username = $1, updated_at = $2 WHERE id = $3;", u.Username, u.UpdatedAt, u.ID)
+	if err != nil {
+		return errorutils.New(errorutils.ErrUserUpdate, err)
+	}
+
+	return nil
+}
+
+func (r *repository) Delete(i uint64) error {
+	_, err := r.db.Query("DELETE FROM users WHERE id = $1", i)
+	if err != nil {
+		return errorutils.New(errorutils.ErrUserDelete, err)
+	}
+
+	return nil
 }

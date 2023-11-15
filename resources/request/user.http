@@ -4,7 +4,32 @@ Content-Type: application/json
 Authorization: Bearer {{token}}
 
 {
-  "email": "kamisdl@kamilov.com",
-  "username": "kasdmil",
-  "password": "lasdsdsdsd"
+  "email": "memo@memolov.com",
+  "username": "memo",
+  "password": "12341234"
 }
+
+
+### Read User
+GET {{host}}/users/11
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+### Reads all Users
+GET {{host}}/users
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+### Edit User
+PUT {{host}}/users/15
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "username": "lastOne"
+}
+
+### Delete User
+DELETE {{host}}/users/15
+Content-Type: application/json
+Authorization: Bearer {{token}}

@@ -13,8 +13,9 @@ import (
 
 type RBAC interface {
 	HasRole(types.Role) func(next echo.HandlerFunc) echo.HandlerFunc
-	CheckHasRole(types.Role, types.Role) bool
-	IsAuthorized(context.Context) bool
+	CheckHasRole(userRole types.Role, requiredRole types.Role) bool
+	IsAdminAuthorized(ctx context.Context) bool
+	IsModAuthorized(context.Context) bool
 	IsMe(context.Context, uint64) bool
 	CheckRoleAndUser(context.Context, uint64, types.Role) (*dto.Claims, error)
 }
@@ -40,7 +41,16 @@ func (r *rbac) IsMe(ctx context.Context, userID uint64) bool {
 	return userID == claims.UID
 }
 
-func (r *rbac) IsAuthorized(ctx context.Context) bool {
+func (r *rbac) IsAdminAuthorized(ctx context.Context) bool {
+	claims, err := appcontext.MtsBlogUser(ctx)
+	if err != nil {
+		return false
+	}
+
+	return roleScores[claims.Role] >= roleScores[types.Admin]
+}
+
+func (r *rbac) IsModAuthorized(ctx context.Context) bool {
 	claims, err := appcontext.MtsBlogUser(ctx)
 	if err != nil {
 		return false

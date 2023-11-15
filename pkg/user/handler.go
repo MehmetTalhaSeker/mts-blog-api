@@ -11,6 +11,9 @@ import (
 
 type Handler interface {
 	Create() echo.HandlerFunc
+	Read() echo.HandlerFunc
+	Update() echo.HandlerFunc
+	Delete() echo.HandlerFunc
 }
 
 type handler struct {
@@ -30,11 +33,59 @@ func (h *handler) Create() echo.HandlerFunc {
 			return err
 		}
 
-		u, err := h.service.Create(r)
+		err := h.service.Create(r)
+		if err != nil {
+			return err
+		}
+
+		return c.JSON(http.StatusCreated, "OK")
+	}
+}
+
+func (h *handler) Read() echo.HandlerFunc {
+	return func(c echo.Context) error {
+		r := new(dto.RequestWithID)
+		if err := echoutils.BindAndValidate(c, r); err != nil {
+			return err
+		}
+
+		u, err := h.service.Read(r)
 		if err != nil {
 			return err
 		}
 
 		return c.JSON(http.StatusOK, u)
+	}
+}
+
+func (h *handler) Update() echo.HandlerFunc {
+	return func(c echo.Context) error {
+		r := new(dto.UserUpdateRequest)
+		if err := echoutils.BindAndValidate(c, r); err != nil {
+			return err
+		}
+
+		resp, err := h.service.Update(c.Request().Context(), r)
+		if err != nil {
+			return err
+		}
+
+		return c.JSON(http.StatusOK, resp)
+	}
+}
+
+func (h *handler) Delete() echo.HandlerFunc {
+	return func(c echo.Context) error {
+		r := new(dto.RequestWithID)
+		if err := echoutils.BindAndValidate(c, r); err != nil {
+			return err
+		}
+
+		resp, err := h.service.Delete(r)
+		if err != nil {
+			return err
+		}
+
+		return c.JSON(http.StatusOK, resp)
 	}
 }

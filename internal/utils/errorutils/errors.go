@@ -17,7 +17,6 @@ var (
 	ErrMissingAuthHeader    = errors.New("missing authorization header")
 	ErrShortPassword        = errors.New("password too short")
 	ErrShortUsername        = errors.New("username too short")
-	ErrUserNotFound         = errors.New("user not found")
 	ErrEmailNotFound        = errors.New("email not found")
 	ErrUsernameAlreadyTaken = errors.New("username already taken")
 	ErrUsernameRequired     = errors.New("username is required")
@@ -40,13 +39,14 @@ var (
 
 // User Errors.
 var (
-	ErrUserCount  = errors.New("user count failed")
-	ErrUserCreate = errors.New("user create failed")
-	ErrUserDelete = errors.New("user delete failed")
-	ErrUserRead   = errors.New("user read failed")
-	ErrUserReads  = errors.New("user reads failed")
-	ErrUserSearch = errors.New("user search failed")
-	ErrUserUpdate = errors.New("user update failed")
+	ErrUserCount    = errors.New("user count failed")
+	ErrUserCreate   = errors.New("user create failed")
+	ErrUserDelete   = errors.New("user delete failed")
+	ErrUserRead     = errors.New("user read failed")
+	ErrUserReads    = errors.New("user reads failed")
+	ErrUserSearch   = errors.New("user search failed")
+	ErrUserUpdate   = errors.New("user update failed")
+	ErrUserNotFound = errors.New("user not found")
 )
 
 // Unorganized Errors.

@@ -12,7 +12,6 @@ const (
 	ErrCodeShortPassword        = "auth/short-password"
 	ErrCodeShortUsername        = "auth/short-username"
 	ErrCodeUserDisabled         = "auth/user-disabled"
-	ErrCodeUserNotFound         = "auth/user-not-found"
 	ErrCodeEmailNotFound        = "auth/email-not-found"
 	ErrCodeUsernameAlreadyTaken = "auth/username-taken"
 	ErrCodeUsernameRequired     = "auth/username-required"
@@ -42,13 +41,14 @@ const (
 
 // User Error Codes.
 const (
-	ErrCodeUserCount  = "user/count-failed"
-	ErrCodeUserCreate = "user/create-failed"
-	ErrCodeUserDelete = "user/delete-failed"
-	ErrCodeUserRead   = "user/read-failed"
-	ErrCodeUserReads  = "user/reads-failed"
-	ErrCodeUserSearch = "user/search-failed"
-	ErrCodeUserUpdate = "user/update-failed"
+	ErrCodeUserCount    = "user/count-failed"
+	ErrCodeUserCreate   = "user/create-failed"
+	ErrCodeUserDelete   = "user/delete-failed"
+	ErrCodeUserRead     = "user/read-failed"
+	ErrCodeUserReads    = "user/reads-failed"
+	ErrCodeUserSearch   = "user/search-failed"
+	ErrCodeUserUpdate   = "user/update-failed"
+	ErrCodeUserNotFound = "user/user-not-found"
 )
 
 // Unorganized Error Codes.

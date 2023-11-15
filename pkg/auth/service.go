@@ -43,11 +43,9 @@ func (s *service) Login(req *dto.LoginRequest) (*dto.WithTokenResponse, error) {
 		return nil, errorutils.New(errorutils.ErrUnexpected, err)
 	}
 
-	resp := dto.WithTokenResponse{
+	return &dto.WithTokenResponse{
 		Token: token,
-	}
-
-	return &resp, nil
+	}, nil
 }
 
 func (s *service) Register(req *dto.RegisterRequest) (*dto.WithTokenResponse, error) {
@@ -76,9 +74,7 @@ func (s *service) Register(req *dto.RegisterRequest) (*dto.WithTokenResponse, er
 		return nil, errorutils.New(errorutils.ErrUnexpected, err)
 	}
 
-	resp := dto.WithTokenResponse{
+	return &dto.WithTokenResponse{
 		Token: token,
-	}
-
-	return &resp, nil
+	}, nil
 }

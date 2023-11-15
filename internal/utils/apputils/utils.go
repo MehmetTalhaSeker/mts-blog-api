@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"os"
+	"strconv"
 	"time"
 
 	"github.com/golang-jwt/jwt"
@@ -66,4 +67,13 @@ func EncryptPassword(password string) (string, error) {
 	}
 
 	return string(cp), nil
+}
+
+func StringToUINT64(s string) (*uint64, error) {
+	pu, err := strconv.ParseUint(s, 10, 64)
+	if err != nil {
+		return nil, err
+	}
+
+	return &pu, nil
 }

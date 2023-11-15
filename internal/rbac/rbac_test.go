@@ -77,7 +77,7 @@ func TestIsAuthorized(t *testing.T) {
 			ctx := context.Background()
 			ctx = appcontext.WithMtsBlogUser(ctx, claims)
 
-			isAuthorized := r.IsAuthorized(ctx)
+			isAuthorized := r.IsModAuthorized(ctx)
 			if isAuthorized != tc.isAuthorized {
 				t.Errorf("expected isAuthorized to be %v, got %v", tc.isAuthorized, isAuthorized)
 			}
