@@ -1,11 +1,12 @@
 module github.com/MehmetTalhaSeker/mts-blog-api
 
-go 1.19
+go 1.21
 
 require (
 	github.com/go-playground/validator/v10 v10.16.0
 	github.com/golang-jwt/jwt v3.2.2+incompatible
 	github.com/google/uuid v1.4.0
+	github.com/iancoleman/strcase v0.3.0
 	github.com/labstack/echo/v4 v4.11.3
 	github.com/lib/pq v1.10.9
 	github.com/spf13/viper v1.17.0

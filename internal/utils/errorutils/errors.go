@@ -32,8 +32,8 @@ var (
 	ErrJSONEncode          = errors.New("json encode error")
 	ErrJSONMarshal         = errors.New("json marshal error")
 	ErrJSONUnmarshal       = errors.New("json unmarshal error")
-	ErrLongPaginationSize  = errors.New("size should be less then 100")
-	ErrShortPaginationSize = errors.New("size should be more then 1")
+	ErrLongPaginationSize  = errors.New("size should be less than 100")
+	ErrShortPaginationSize = errors.New("size should be more than 1")
 	ErrUnexpected          = errors.New("unexpected error")
 )
 

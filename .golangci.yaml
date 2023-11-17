@@ -47,7 +47,7 @@ issues:
     - EXC0014
     - EXC0015
 run:
-  go: "1.19"
+  go: "1.21"
 linters-settings:
   tagliatelle:
     case:

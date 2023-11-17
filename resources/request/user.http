@@ -16,7 +16,7 @@ Content-Type: application/json
 Authorization: Bearer {{token}}
 
 ### Reads all Users
-GET {{host}}/users
+GET {{host}}/users?sort=updatedAt,desc
 Content-Type: application/json
 Authorization: Bearer {{token}}
 

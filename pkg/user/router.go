@@ -25,8 +25,7 @@ func (r *Router) New() {
 
 	ugr.POST("", uh.Create(), r.RBAC.HasRole(types.Admin))
 	ugr.GET("/:id", uh.Read(), r.RBAC.HasRole(types.Mod))
+	ugr.GET("", uh.Reads(), r.RBAC.HasRole(types.Mod))
 	ugr.PUT("/:id", uh.Update(), r.RBAC.HasRole(types.Registered))
 	ugr.DELETE("/:id", uh.Delete(), r.RBAC.HasRole(types.Admin))
-
-	ugr.GET("", uh.Read(), r.RBAC.HasRole(types.Registered))
 }

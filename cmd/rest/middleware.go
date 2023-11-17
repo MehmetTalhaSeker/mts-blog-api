@@ -59,6 +59,7 @@ func (app *application) authenticate() echo.MiddlewareFunc {
 			}
 
 			ur := user.NewRepository(app.db)
+
 			u, err := ur.Read(claims.UID)
 			if err != nil {
 				return err

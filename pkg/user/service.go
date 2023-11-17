@@ -7,6 +7,7 @@ import (
 	"github.com/MehmetTalhaSeker/mts-blog-api/internal/dto"
 	"github.com/MehmetTalhaSeker/mts-blog-api/internal/model"
 	"github.com/MehmetTalhaSeker/mts-blog-api/internal/rbac"
+	"github.com/MehmetTalhaSeker/mts-blog-api/internal/shared/pagination"
 	"github.com/MehmetTalhaSeker/mts-blog-api/internal/types"
 	"github.com/MehmetTalhaSeker/mts-blog-api/internal/utils/apputils"
 	"github.com/MehmetTalhaSeker/mts-blog-api/internal/utils/errorutils"
@@ -15,6 +16,7 @@ import (
 type Service interface {
 	Create(*dto.UserCreateRequest) error
 	Read(*dto.RequestWithID) (*dto.UserResponse, error)
+	Reads(*pagination.Pageable) ([]*dto.UserResponse, error)
 	Update(context.Context, *dto.UserUpdateRequest) (*dto.UserResponse, error)
 	Delete(*dto.RequestWithID) (*dto.ResponseWithID, error)
 }
@@ -67,6 +69,21 @@ func (s *service) Read(req *dto.RequestWithID) (*dto.UserResponse, error) {
 	}
 
 	return u.ToDTO(), nil
+}
+
+func (s *service) Reads(p *pagination.Pageable) ([]*dto.UserResponse, error) {
+	users, err := s.repository.Reads(p)
+	if err != nil {
+		return nil, err
+	}
+
+	var usr []*dto.UserResponse
+
+	for _, u := range *users {
+		usr = append(usr, u.ToDTO())
+	}
+
+	return usr, nil
 }
 
 func (s *service) Update(ctx context.Context, req *dto.UserUpdateRequest) (*dto.UserResponse, error) {

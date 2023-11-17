@@ -6,12 +6,14 @@ import (
 	"github.com/labstack/echo/v4"
 
 	"github.com/MehmetTalhaSeker/mts-blog-api/internal/dto"
+	"github.com/MehmetTalhaSeker/mts-blog-api/internal/shared/pagination"
 	"github.com/MehmetTalhaSeker/mts-blog-api/internal/utils/echoutils"
 )
 
 type Handler interface {
 	Create() echo.HandlerFunc
 	Read() echo.HandlerFunc
+	Reads() echo.HandlerFunc
 	Update() echo.HandlerFunc
 	Delete() echo.HandlerFunc
 }
@@ -58,6 +60,24 @@ func (h *handler) Read() echo.HandlerFunc {
 	}
 }
 
+func (h *handler) Reads() echo.HandlerFunc {
+	return func(c echo.Context) error {
+		p := pagination.NewPagination()
+		if err := echoutils.BindAndValidate(c, p); err != nil {
+			return err
+		}
+
+		res, err := h.service.Reads(p)
+		if err != nil {
+			return err
+		}
+
+		p.PaginationHeader(c)
+
+		return c.JSON(http.StatusOK, res)
+	}
+}
+
 func (h *handler) Update() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		r := new(dto.UserUpdateRequest)
@@ -65,12 +85,12 @@ func (h *handler) Update() echo.HandlerFunc {
 			return err
 		}
 
-		resp, err := h.service.Update(c.Request().Context(), r)
+		res, err := h.service.Update(c.Request().Context(), r)
 		if err != nil {
 			return err
 		}
 
-		return c.JSON(http.StatusOK, resp)
+		return c.JSON(http.StatusOK, res)
 	}
 }
 
@@ -81,11 +101,11 @@ func (h *handler) Delete() echo.HandlerFunc {
 			return err
 		}
 
-		resp, err := h.service.Delete(r)
+		res, err := h.service.Delete(r)
 		if err != nil {
 			return err
 		}
 
-		return c.JSON(http.StatusOK, resp)
+		return c.JSON(http.StatusOK, res)
 	}
 }

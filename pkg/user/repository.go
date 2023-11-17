@@ -2,8 +2,10 @@ package user
 
 import (
 	"database/sql"
+	"fmt"
 
 	"github.com/MehmetTalhaSeker/mts-blog-api/internal/model"
+	"github.com/MehmetTalhaSeker/mts-blog-api/internal/shared/pagination"
 	"github.com/MehmetTalhaSeker/mts-blog-api/internal/utils/dbutils"
 	"github.com/MehmetTalhaSeker/mts-blog-api/internal/utils/errorutils"
 )
@@ -12,6 +14,7 @@ type Repository interface {
 	Create(user *model.User) error
 	Read(id uint64) (*model.User, error)
 	ReadByEmail(email string) (*model.User, error)
+	Reads(*pagination.Pageable) (*[]model.User, error)
 	Update(u *model.User) error
 	Delete(i uint64) error
 }
@@ -73,6 +76,66 @@ func (r *repository) ReadByEmail(e string) (*model.User, error) {
 	}
 
 	return nil, errorutils.New(errorutils.ErrEmailNotFound, errorutils.ErrUserRead)
+}
+
+func (r *repository) Reads(p *pagination.Pageable) (*[]model.User, error) {
+	// Note: Just for show off. I know it can be handled in single query :)
+	fq := `SELECT * FROM users ORDER BY ` +
+		fmt.Sprintf("%s LIMIT $1 OFFSET $2;", p.Order())
+
+	cq := `SELECT COUNT(*) FROM users;`
+
+	countErr := make(chan error)
+	findErr := make(chan error)
+
+	var users []model.User
+
+	go func() {
+		rows, err := r.db.Query(fq, p.Size, p.Offset())
+		if err != nil {
+			findErr <- errorutils.New(errorutils.ErrUserReads, err)
+		}
+
+		for rows.Next() {
+			u, err := dbutils.ScanIntoUser(rows)
+			if err != nil {
+				findErr <- errorutils.New(errorutils.ErrUserReads, err)
+			}
+
+			users = append(users, *u)
+		}
+		findErr <- nil
+	}()
+
+	var count int64
+	go func() {
+		rows, err := r.db.Query(cq)
+		if err != nil {
+			countErr <- errorutils.New(errorutils.ErrUserCount, err)
+		}
+
+		for rows.Next() {
+			err = rows.Scan(&count)
+			if err != nil {
+				countErr <- errorutils.New(errorutils.ErrUserCount, err)
+			}
+		}
+
+		p.TotalCount = count
+		countErr <- nil
+	}()
+
+	err := <-countErr
+	if err != nil {
+		return nil, err
+	}
+
+	err = <-findErr
+	if err != nil {
+		return nil, err
+	}
+
+	return &users, nil
 }
 
 func (r *repository) Update(u *model.User) error {
