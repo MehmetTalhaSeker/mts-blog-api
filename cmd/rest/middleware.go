@@ -9,12 +9,12 @@ import (
 	"github.com/golang-jwt/jwt"
 	"github.com/labstack/echo/v4"
 
+	postgresadapter "github.com/MehmetTalhaSeker/mts-blog-api/internal/adapter/postgres"
 	"github.com/MehmetTalhaSeker/mts-blog-api/internal/appcontext"
 	"github.com/MehmetTalhaSeker/mts-blog-api/internal/dto"
 	"github.com/MehmetTalhaSeker/mts-blog-api/internal/types"
 	"github.com/MehmetTalhaSeker/mts-blog-api/internal/utils/apputils"
 	"github.com/MehmetTalhaSeker/mts-blog-api/internal/utils/errorutils"
-	"github.com/MehmetTalhaSeker/mts-blog-api/pkg/user"
 )
 
 func (app *application) authenticate() echo.MiddlewareFunc {
@@ -58,7 +58,7 @@ func (app *application) authenticate() echo.MiddlewareFunc {
 				return err
 			}
 
-			ur := user.NewRepository(app.db)
+			ur := postgresadapter.NewUserRepository(app.db)
 
 			u, err := ur.Read(claims.UID)
 			if err != nil {

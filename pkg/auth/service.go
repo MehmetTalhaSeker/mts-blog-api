@@ -7,10 +7,10 @@ import (
 
 	"github.com/MehmetTalhaSeker/mts-blog-api/internal/dto"
 	"github.com/MehmetTalhaSeker/mts-blog-api/internal/model"
+	"github.com/MehmetTalhaSeker/mts-blog-api/internal/repository"
 	"github.com/MehmetTalhaSeker/mts-blog-api/internal/types"
 	"github.com/MehmetTalhaSeker/mts-blog-api/internal/utils/apputils"
 	"github.com/MehmetTalhaSeker/mts-blog-api/internal/utils/errorutils"
-	"github.com/MehmetTalhaSeker/mts-blog-api/pkg/user"
 )
 
 type Service interface {
@@ -19,10 +19,10 @@ type Service interface {
 }
 
 type service struct {
-	userRepository user.Repository
+	userRepository repository.User
 }
 
-func NewService(repository user.Repository) Service {
+func NewService(repository repository.User) Service {
 	return &service{
 		userRepository: repository,
 	}

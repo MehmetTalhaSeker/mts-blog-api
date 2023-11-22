@@ -6,19 +6,20 @@ import (
 	"github.com/labstack/echo/v4"
 
 	"github.com/MehmetTalhaSeker/mts-blog-api/internal/rbac"
+	"github.com/MehmetTalhaSeker/mts-blog-api/internal/repository"
 	"github.com/MehmetTalhaSeker/mts-blog-api/internal/types"
 )
 
 type Router struct {
-	Authenticate echo.MiddlewareFunc
-	DB           *sql.DB
-	RBAC         rbac.RBAC
-	RouterGroup  *echo.Group
+	Authenticate   echo.MiddlewareFunc
+	DB             *sql.DB
+	RBAC           rbac.RBAC
+	RouterGroup    *echo.Group
+	UserRepository repository.User
 }
 
 func (r *Router) New() {
-	ur := NewRepository(r.DB)
-	us := NewService(r.RBAC, ur)
+	us := NewService(r.RBAC, r.UserRepository)
 	uh := NewHandler(us)
 
 	ugr := r.RouterGroup.Group("/users", r.Authenticate)

@@ -7,6 +7,7 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 
+	postgresadapter "github.com/MehmetTalhaSeker/mts-blog-api/internal/adapter/postgres"
 	"github.com/MehmetTalhaSeker/mts-blog-api/internal/utils/errorutils"
 	"github.com/MehmetTalhaSeker/mts-blog-api/internal/utils/validatorutils"
 	"github.com/MehmetTalhaSeker/mts-blog-api/pkg/auth"
@@ -32,19 +33,22 @@ func (app *application) start() {
 	// create a new router group.
 	routerGroup := e.Group("v1")
 
+	ur := postgresadapter.NewUserRepository(app.db)
+
 	// user router initialization.
 	userRouter := &user.Router{
-		Authenticate: app.authenticate(),
-		DB:           app.db,
-		RBAC:         app.rbac,
-		RouterGroup:  routerGroup,
+		Authenticate:   app.authenticate(),
+		DB:             app.db,
+		RBAC:           app.rbac,
+		RouterGroup:    routerGroup,
+		UserRepository: ur,
 	}
 	userRouter.New()
 
 	// auth router initialization.
 	authRouter := &auth.Router{
-		DB:          app.db,
-		RouterGroup: routerGroup,
+		RouterGroup:    routerGroup,
+		UserRepository: ur,
 	}
 	authRouter.New()
 

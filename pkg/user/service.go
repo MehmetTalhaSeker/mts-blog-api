@@ -7,6 +7,7 @@ import (
 	"github.com/MehmetTalhaSeker/mts-blog-api/internal/dto"
 	"github.com/MehmetTalhaSeker/mts-blog-api/internal/model"
 	"github.com/MehmetTalhaSeker/mts-blog-api/internal/rbac"
+	"github.com/MehmetTalhaSeker/mts-blog-api/internal/repository"
 	"github.com/MehmetTalhaSeker/mts-blog-api/internal/shared/pagination"
 	"github.com/MehmetTalhaSeker/mts-blog-api/internal/types"
 	"github.com/MehmetTalhaSeker/mts-blog-api/internal/utils/apputils"
@@ -22,11 +23,11 @@ type Service interface {
 }
 
 type service struct {
-	repository Repository
+	repository repository.User
 	rbac       rbac.RBAC
 }
 
-func NewService(rbac rbac.RBAC, repository Repository) Service {
+func NewService(rbac rbac.RBAC, repository repository.User) Service {
 	return &service{
 		repository: repository,
 		rbac:       rbac,

@@ -1,21 +1,18 @@
 package auth
 
 import (
-	"database/sql"
-
 	"github.com/labstack/echo/v4"
 
-	"github.com/MehmetTalhaSeker/mts-blog-api/pkg/user"
+	"github.com/MehmetTalhaSeker/mts-blog-api/internal/repository"
 )
 
 type Router struct {
-	RouterGroup *echo.Group
-	DB          *sql.DB
+	RouterGroup    *echo.Group
+	UserRepository repository.User
 }
 
 func (r *Router) New() {
-	ur := user.NewRepository(r.DB)
-	as := NewService(ur)
+	as := NewService(r.UserRepository)
 	ah := NewHandler(as)
 
 	ugr := r.RouterGroup.Group("/auth")
