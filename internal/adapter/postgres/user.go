@@ -2,7 +2,9 @@ package postgresadapter
 
 import (
 	"database/sql"
+	"errors"
 	"fmt"
+	"github.com/lib/pq"
 
 	"github.com/MehmetTalhaSeker/mts-blog-api/internal/model"
 	"github.com/MehmetTalhaSeker/mts-blog-api/internal/repository"
@@ -27,7 +29,15 @@ func (r *userRepository) Create(u *model.User) error {
     VALUES ($1, $2, $3, $4, $5, $6)`
 
 	_, err := r.db.Query(query, u.Email, u.Username, u.EncryptedPassword, u.Role, u.CreatedAt, u.UpdatedAt)
+
+	var pErr *pq.Error
 	if err != nil {
+		switch errors.As(err, &pErr) {
+		case pErr.Constraint == "users_username_key":
+			return errorutils.New(errorutils.ErrUsernameAlreadyTaken, err)
+		case pErr.Constraint == "users_email_key":
+			return errorutils.New(errorutils.ErrEmailAlreadyTaken, err)
+		}
 		return errorutils.New(errorutils.ErrUserCreate, err)
 	}
 
