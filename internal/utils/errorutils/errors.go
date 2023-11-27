@@ -134,7 +134,7 @@ var statusCodeMap = map[string]int{
 	ErrCodeShortUsername:        http.StatusBadRequest,
 	ErrCodeUnauthorized:         http.StatusUnauthorized,
 	ErrCodeUserDisabled:         http.StatusUnauthorized,
-	ErrCodeUserNotFound:         http.StatusBadRequest,
+	ErrCodeUserNotFound:         http.StatusNotFound,
 	ErrCodeEmailNotFound:        http.StatusBadRequest,
 	ErrCodeUsernameAlreadyTaken: http.StatusBadRequest,
 	ErrCodeUsernameRequired:     http.StatusBadRequest,

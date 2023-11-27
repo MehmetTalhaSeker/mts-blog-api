@@ -192,32 +192,3 @@ func Delete(ctx context.Context, path string, headers ...map[string]string) (int
 
 	return resp.StatusCode, body, resp.Header, nil
 }
-
-func ReverseAndSlice(arr []any, start, end int) []any {
-	rev := reverse(arr)
-
-	return GetSubSlice(rev, start, end)
-}
-
-func GetSubSlice(arr []any, start, end int) []any {
-	if start < 0 {
-		start = 0
-	}
-
-	if end > len(arr) {
-		end = len(arr)
-	}
-
-	return arr[start:end]
-}
-
-func reverse(arr []any) []any {
-	length := len(arr)
-
-	result := make([]any, length)
-	for i, v := range arr {
-		result[length-i-1] = v
-	}
-
-	return result
-}

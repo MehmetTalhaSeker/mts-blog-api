@@ -60,7 +60,7 @@ func (r *userRepository) Read(i uint64) (*model.User, error) {
 		return user, nil
 	}
 
-	return nil, errorutils.New(errorutils.ErrUserNotFound, nil)
+	return nil, errorutils.New(errorutils.ErrUserNotFound, errorutils.ErrUserRead)
 }
 
 func (r *userRepository) ReadByEmail(e string) (*model.User, error) {
@@ -143,7 +143,15 @@ func (r *userRepository) Reads(p *pagination.Pageable) (*[]model.User, error) {
 
 func (r *userRepository) Update(u *model.User) error {
 	_, err := r.db.Query("UPDATE users SET username = $1, updated_at = $2 WHERE id = $3;", u.Username, u.UpdatedAt, u.ID)
+
+	var pErr *pq.Error
+
 	if err != nil {
+		switch errors.As(err, &pErr) {
+		case pErr.Constraint == "users_username_key":
+			return errorutils.New(errorutils.ErrUsernameAlreadyTaken, err)
+		}
+
 		return errorutils.New(errorutils.ErrUserUpdate, err)
 	}
 

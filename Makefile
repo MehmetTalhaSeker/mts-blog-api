@@ -1,4 +1,4 @@
-E2E_TEST_PKGs := ./pkg/auth
+E2E_TEST_PKGs := ./pkg/auth,./pkg/user
 E2E_TEST_OUTPUT := e2e_coverage.out
 
 # Run the linter on the specified path

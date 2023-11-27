@@ -27,7 +27,7 @@ func NewPagination() *Pageable {
 }
 
 func (p *Pageable) HasNext() bool {
-	return *p.Page < p.GetTotalPage()-1
+	return *p.Page < p.GetTotalPage()
 }
 
 func (p *Pageable) GetTotalPage() int64 {

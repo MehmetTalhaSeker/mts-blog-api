@@ -2,33 +2,44 @@ package testutils
 
 import (
 	"database/sql"
-	"fmt"
 	"log"
-	"strings"
+
+	"github.com/lib/pq"
 
 	"github.com/MehmetTalhaSeker/mts-blog-api/internal/model"
 )
 
 func InsertUsers(us []*model.User, db *sql.DB) {
-	vs := make([]string, 0, len(us))
-	va := make([]interface{}, 0, len(us)*3)
-
-	for _, u := range us {
-		vs = append(vs, "($1, $2, $3, $4, $5, $6)")
-		va = append(va, u.Email)
-		va = append(va, u.Username)
-		va = append(va, u.EncryptedPassword)
-		va = append(va, u.Role)
-		va = append(va, u.CreatedAt)
-		va = append(va, u.UpdatedAt)
+	txn, err := db.Begin()
+	if err != nil {
+		log.Fatal(err)
 	}
 
-	stmt := fmt.Sprintf("INSERT INTO users (email, username, encrypted_password, user_role, created_at, updated_at) VALUES %s",
-		strings.Join(vs, ","))
-
-	_, err := db.Exec(stmt, va...)
+	stmt, err := txn.Prepare(pq.CopyIn("users", "id", "email", "username", "encrypted_password", "user_role", "created_at", "updated_at"))
 	if err != nil {
-		log.Fatalf(err.Error())
+		log.Fatal(err)
+	}
+
+	for _, user := range us {
+		_, err = stmt.Exec(user.ID, user.Email, user.Username, user.EncryptedPassword, user.Role, user.CreatedAt, user.UpdatedAt)
+		if err != nil {
+			log.Fatal(err)
+		}
+	}
+
+	_, err = stmt.Exec()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	err = stmt.Close()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	err = txn.Commit()
+	if err != nil {
+		log.Fatal(err)
 	}
 }
 
