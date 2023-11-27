@@ -3,12 +3,16 @@ module github.com/MehmetTalhaSeker/mts-blog-api
 go 1.21
 
 require (
+	github.com/docker/go-connections v0.4.0
 	github.com/go-playground/validator/v10 v10.16.0
 	github.com/golang-jwt/jwt v3.2.2+incompatible
+	github.com/google/go-cmp v0.6.0
 	github.com/google/uuid v1.4.0
 	github.com/iancoleman/strcase v0.3.0
 	github.com/labstack/echo/v4 v4.11.3
 	github.com/lib/pq v1.10.9
+	github.com/onsi/ginkgo/v2 v2.13.1
+	github.com/onsi/gomega v1.30.0
 	github.com/spf13/viper v1.17.0
 	github.com/stretchr/testify v1.8.4
 	github.com/testcontainers/testcontainers-go v0.26.0
@@ -27,15 +31,17 @@ require (
 	github.com/davecgh/go-spew v1.1.2-0.20180830191138-d8f796af33cc // indirect
 	github.com/docker/distribution v2.8.2+incompatible // indirect
 	github.com/docker/docker v24.0.7+incompatible // indirect
-	github.com/docker/go-connections v0.4.0 // indirect
 	github.com/docker/go-units v0.5.0 // indirect
 	github.com/fsnotify/fsnotify v1.7.0 // indirect
 	github.com/gabriel-vasile/mimetype v1.4.3 // indirect
+	github.com/go-logr/logr v1.3.0 // indirect
 	github.com/go-ole/go-ole v1.2.6 // indirect
 	github.com/go-playground/locales v0.14.1 // indirect
 	github.com/go-playground/universal-translator v0.18.1 // indirect
+	github.com/go-task/slim-sprig v0.0.0-20230315185526-52ccab3ef572 // indirect
 	github.com/gogo/protobuf v1.3.2 // indirect
 	github.com/golang/protobuf v1.5.3 // indirect
+	github.com/google/pprof v0.0.0-20210407192527-94a9f03dee38 // indirect
 	github.com/hashicorp/hcl v1.0.0 // indirect
 	github.com/klauspost/compress v1.17.0 // indirect
 	github.com/labstack/gommon v0.4.1 // indirect

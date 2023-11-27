@@ -4,12 +4,12 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
+
 	"github.com/lib/pq"
 
 	"github.com/MehmetTalhaSeker/mts-blog-api/internal/model"
 	"github.com/MehmetTalhaSeker/mts-blog-api/internal/repository"
 	"github.com/MehmetTalhaSeker/mts-blog-api/internal/shared/pagination"
-	"github.com/MehmetTalhaSeker/mts-blog-api/internal/utils/dbutils"
 	"github.com/MehmetTalhaSeker/mts-blog-api/internal/utils/errorutils"
 )
 
@@ -38,6 +38,7 @@ func (r *userRepository) Create(u *model.User) error {
 		case pErr.Constraint == "users_email_key":
 			return errorutils.New(errorutils.ErrEmailAlreadyTaken, err)
 		}
+
 		return errorutils.New(errorutils.ErrUserCreate, err)
 	}
 
@@ -51,7 +52,7 @@ func (r *userRepository) Read(i uint64) (*model.User, error) {
 	}
 
 	for rows.Next() {
-		user, err := dbutils.ScanIntoUser(rows)
+		user, err := scanIntoUser(rows)
 		if err != nil {
 			return nil, errorutils.New(errorutils.ErrUserNotFound, err)
 		}
@@ -69,7 +70,7 @@ func (r *userRepository) ReadByEmail(e string) (*model.User, error) {
 	}
 
 	for rows.Next() {
-		user, err := dbutils.ScanIntoUser(rows)
+		user, err := scanIntoUser(rows)
 		if err != nil {
 			return nil, errorutils.New(errorutils.ErrUserNotFound, err)
 		}
@@ -99,7 +100,7 @@ func (r *userRepository) Reads(p *pagination.Pageable) (*[]model.User, error) {
 		}
 
 		for rows.Next() {
-			u, err := dbutils.ScanIntoUser(rows)
+			u, err := scanIntoUser(rows)
 			if err != nil {
 				findErr <- errorutils.New(errorutils.ErrUserReads, err)
 			}
@@ -156,4 +157,11 @@ func (r *userRepository) Delete(i uint64) error {
 	}
 
 	return nil
+}
+
+func scanIntoUser(rows *sql.Rows) (*model.User, error) {
+	u := new(model.User)
+	err := rows.Scan(&u.ID, &u.EncryptedPassword, &u.Username, &u.Email, &u.Role, &u.CreatedAt, &u.UpdatedAt)
+
+	return u, err
 }

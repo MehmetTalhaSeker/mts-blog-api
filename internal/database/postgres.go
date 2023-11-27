@@ -3,97 +3,60 @@ package database
 import (
 	"database/sql"
 	"fmt"
+	"log"
+	"sync"
 
 	_ "github.com/lib/pq"
 )
 
-type Opts struct {
-	user     string
-	name     string
-	password string
-	port     string
-}
+var (
+	singleton *postgresStore
+	storeOnce sync.Once
+	initOnce  sync.Once
+)
 
-type OptsFunc func(*Opts)
-
-func defaultOpts() Opts {
-	return Opts{
-		user:     "development",
-		name:     "development",
-		password: "development",
-		port:     "5432",
-	}
-}
-
-func WithUser(u string) OptsFunc {
-	return func(opts *Opts) {
-		opts.user = u
-	}
-}
-
-func WithPassword(p string) OptsFunc {
-	return func(opts *Opts) {
-		opts.password = p
-	}
-}
-
-func WithName(n string) OptsFunc {
-	return func(opts *Opts) {
-		opts.name = n
-	}
-}
-
-func WithPort(p string) OptsFunc {
-	return func(opts *Opts) {
-		opts.port = p
-	}
-}
-
-type Store struct {
+type postgresStore struct {
 	DB *sql.DB
 }
 
-func NewPostgresStore(opts ...OptsFunc) (*Store, error) {
-	o := defaultOpts()
-	for _, fn := range opts {
-		fn(&o)
-	}
+func NewPostgresStore(opts ...StoreOptsFunc) SQLStore {
+	storeOnce.Do(func() {
+		o := postgresStoreDefaultOpts()
+		for _, fn := range opts {
+			fn(&o)
+		}
 
-	conStr := fmt.Sprintf(`user=%s dbname=%s password=%s port=%s sslmode=disable`, o.user, o.name, o.password, o.port)
+		conStr := fmt.Sprintf(`user=%s dbname=%s password=%s port=%s sslmode=disable`, o.user, o.name, o.password, o.port)
 
-	db, err := sql.Open("postgres", conStr)
-	if err != nil {
-		return nil, err
-	}
+		db, err := sql.Open("postgres", conStr)
+		if err != nil {
+			log.Fatal(err.Error())
+		}
 
-	if err := db.Ping(); err != nil {
-		return nil, err
-	}
+		singleton = &postgresStore{DB: db}
 
-	return &Store{DB: db}, nil
+		if err := db.Ping(); err != nil {
+			log.Fatal("Connection Error: " + err.Error())
+		}
+	})
+
+	return singleton
 }
 
-func (s Store) Init() error {
-	if err := s.createUsersEnumRoles(); err != nil {
-		return err
-	}
-
-	if err := s.createUsersTable(); err != nil {
-		return err
-	}
-
-	if err := s.createPostsTable(); err != nil {
-		return err
-	}
-
-	if err := s.createCommentsTable(); err != nil {
-		return err
-	}
-
-	return nil
+func (s postgresStore) GetInstance() *sql.DB {
+	return s.DB
 }
 
-func (s Store) createUsersEnumRoles() error {
+func (s postgresStore) InitDB() {
+	initOnce.Do(func() {
+		s.createUsersEnumRoles()
+		s.createUsersTable()
+		s.createPostsTable()
+		s.createCommentsTable()
+	})
+}
+
+func (s postgresStore) createUsersEnumRoles() {
 	query := `DO $$ BEGIN
 	IF to_regtype('user_roles') IS NULL THEN
 	CREATE TYPE user_roles AS ENUM('admin', 'mod', 'registered');
@@ -102,11 +65,12 @@ func (s Store) createUsersEnumRoles() error {
 	`
 
 	_, err := s.DB.Exec(query)
-
-	return err
+	if err != nil {
+		log.Fatal(err.Error())
+	}
 }
 
-func (s Store) createUsersTable() error {
+func (s postgresStore) createUsersTable() {
 	query := `CREATE TABLE IF NOT EXISTS users (
     id				   serial PRIMARY KEY,
     encrypted_password varchar(500) NOT NULL, 
@@ -118,11 +82,12 @@ func (s Store) createUsersTable() error {
 	)`
 
 	_, err := s.DB.Exec(query)
-
-	return err
+	if err != nil {
+		log.Fatal(err.Error())
+	}
 }
 
-func (s Store) createPostsTable() error {
+func (s postgresStore) createPostsTable() {
 	query := `CREATE TABLE IF NOT EXISTS posts (
     id 				   serial PRIMARY KEY,
     title 			   varchar(255),
@@ -132,11 +97,12 @@ func (s Store) createPostsTable() error {
 	)`
 
 	_, err := s.DB.Exec(query)
-
-	return err
+	if err != nil {
+		log.Fatal(err.Error())
+	}
 }
 
-func (s Store) createCommentsTable() error {
+func (s postgresStore) createCommentsTable() {
 	query := `CREATE TABLE IF NOT EXISTS comments (
     id 				   serial PRIMARY KEY,
     text 			   varchar(255),
@@ -148,6 +114,16 @@ func (s Store) createCommentsTable() error {
 	)`
 
 	_, err := s.DB.Exec(query)
+	if err != nil {
+		log.Fatal(err.Error())
+	}
+}
 
-	return err
+func postgresStoreDefaultOpts() StoreOpts {
+	return StoreOpts{
+		user:     "development",
+		name:     "development",
+		password: "development",
+		port:     "5432",
+	}
 }

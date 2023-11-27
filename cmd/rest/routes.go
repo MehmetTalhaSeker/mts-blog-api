@@ -38,7 +38,6 @@ func (app *application) start() {
 	// user router initialization.
 	userRouter := &user.Router{
 		Authenticate:   app.authenticate(),
-		DB:             app.db,
 		RBAC:           app.rbac,
 		RouterGroup:    routerGroup,
 		UserRepository: ur,

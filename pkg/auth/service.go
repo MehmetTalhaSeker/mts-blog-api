@@ -45,6 +45,12 @@ func (s *service) Login(req *dto.LoginRequest) (*dto.WithTokenResponse, error) {
 
 	return &dto.WithTokenResponse{
 		Token: token,
+		Claims: dto.Claims{
+			UID:      u.ID,
+			Role:     u.Role,
+			Username: u.Username,
+			Email:    u.Email,
+		},
 	}, nil
 }
 
@@ -76,5 +82,10 @@ func (s *service) Register(req *dto.RegisterRequest) (*dto.WithTokenResponse, er
 
 	return &dto.WithTokenResponse{
 		Token: token,
+		Claims: dto.Claims{
+			Role:     u.Role,
+			Username: u.Username,
+			Email:    u.Email,
+		},
 	}, nil
 }

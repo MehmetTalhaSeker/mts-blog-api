@@ -19,24 +19,18 @@ func main() {
 	// Initialize application configs.
 	cfg := config.Init()
 
-	// Create a Postgres Store.
-	store, err := database.NewPostgresStore(database.WithUser(cfg.DB.User), database.WithName(cfg.DB.Name), database.WithPassword(cfg.DB.Password))
-	if err != nil {
-		log.Fatal(err)
-	}
+	// Create a Postgres store.
+	store := database.NewPostgresStore(database.WithUser(cfg.DB.User), database.WithName(cfg.DB.Name), database.WithPassword(cfg.DB.Password))
 
-	// Initialize the Postgres Store.
-	err = store.Init()
-	if err != nil {
-		log.Fatal(err)
-	}
+	// Initialize the Postgres store.
+	store.InitDB()
 
 	// Initialize Role based access control.
 	rb := rbac.New()
 
 	app := &application{
 		config: cfg,
-		db:     store.DB,
+		db:     store.GetInstance(),
 		rbac:   rb,
 	}
 

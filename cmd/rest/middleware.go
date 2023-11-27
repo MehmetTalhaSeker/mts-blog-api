@@ -62,7 +62,7 @@ func (app *application) authenticate() echo.MiddlewareFunc {
 
 			u, err := ur.Read(claims.UID)
 			if err != nil {
-				return err
+				return errorutils.New(errorutils.ErrLoginFailed, err)
 			}
 
 			if u.Role != claims.Role || u.Status == types.Passive {

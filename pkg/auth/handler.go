@@ -52,6 +52,6 @@ func (h *handler) Register() echo.HandlerFunc {
 			return err
 		}
 
-		return c.JSON(http.StatusOK, resp)
+		return c.JSON(http.StatusCreated, resp)
 	}
 }

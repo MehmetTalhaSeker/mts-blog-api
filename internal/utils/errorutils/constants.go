@@ -8,6 +8,7 @@ const (
 	ErrCodeExpiredToken         = "auth/expired-token"
 	ErrCodeLongPassword         = "auth/long-password"
 	ErrCodeLongUsername         = "auth/long-username"
+	ErrCodeLoginFailed          = "auth/login-failed"
 	ErrCodeMissingAuthHeader    = "auth/missing-header"
 	ErrCodeShortPassword        = "auth/short-password"
 	ErrCodeShortUsername        = "auth/short-username"

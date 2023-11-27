@@ -77,3 +77,12 @@ func StringToUINT64(s string) (*uint64, error) {
 
 	return &pu, nil
 }
+
+func ToSliceOfAny[T any](s []T) []T {
+	result := make([]T, len(s))
+	for i, v := range s {
+		result[i] = v
+	}
+
+	return result
+}

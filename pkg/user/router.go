@@ -1,8 +1,6 @@
 package user
 
 import (
-	"database/sql"
-
 	"github.com/labstack/echo/v4"
 
 	"github.com/MehmetTalhaSeker/mts-blog-api/internal/rbac"
@@ -12,7 +10,6 @@ import (
 
 type Router struct {
 	Authenticate   echo.MiddlewareFunc
-	DB             *sql.DB
 	RBAC           rbac.RBAC
 	RouterGroup    *echo.Group
 	UserRepository repository.User

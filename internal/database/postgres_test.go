@@ -1,4 +1,4 @@
-package database
+package database_test
 
 import (
 	"context"
@@ -8,6 +8,8 @@ import (
 
 	"github.com/testcontainers/testcontainers-go"
 	"github.com/testcontainers/testcontainers-go/wait"
+
+	"github.com/MehmetTalhaSeker/mts-blog-api/internal/database"
 )
 
 const (
@@ -63,14 +65,11 @@ func TestNewPostgresStore(t *testing.T) {
 	}()
 
 	// Check store is nil or not.
-	store, err := NewPostgresStore(WithUser(user), WithName(name), WithPassword(password), WithPort(p.Port()))
-	if err != nil {
-		t.Fatalf("NewPostgresStore failed: %v", err)
-	}
+	store := database.NewPostgresStore(database.WithUser(user), database.WithName(name), database.WithPassword(password), database.WithPort(p.Port()))
 
 	if store == nil {
 		t.Fatalf("NewPostgresStore returned a nil store")
 	}
 
-	defer store.DB.Close()
+	defer store.GetInstance().Close()
 }

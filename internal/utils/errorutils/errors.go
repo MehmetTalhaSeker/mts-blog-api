@@ -14,6 +14,7 @@ var (
 	ErrExpiredToken         = errors.New("expired token")
 	ErrLongPassword         = errors.New("password should be less then 55")
 	ErrLongUsername         = errors.New("username  should be less then 21")
+	ErrLoginFailed          = errors.New("email or password is incorrect")
 	ErrMissingAuthHeader    = errors.New("missing authorization header")
 	ErrShortPassword        = errors.New("password too short")
 	ErrShortUsername        = errors.New("username too short")
@@ -69,6 +70,7 @@ var errorCodes = map[error]string{
 	ErrExpiredToken:         ErrCodeExpiredToken,
 	ErrLongPassword:         ErrCodeLongPassword,
 	ErrLongUsername:         ErrCodeLongUsername,
+	ErrLoginFailed:          ErrCodeLoginFailed,
 	ErrMissingAuthHeader:    ErrCodeMissingAuthHeader,
 	ErrShortPassword:        ErrCodeShortPassword,
 	ErrShortUsername:        ErrCodeShortUsername,
@@ -126,13 +128,14 @@ var statusCodeMap = map[string]int{
 	ErrCodeInvalidRequest:       http.StatusBadRequest,
 	ErrCodeLongPassword:         http.StatusBadRequest,
 	ErrCodeLongUsername:         http.StatusBadRequest,
+	ErrCodeLoginFailed:          http.StatusBadRequest,
 	ErrCodeMissingAuthHeader:    http.StatusUnauthorized,
 	ErrCodeShortPassword:        http.StatusBadRequest,
 	ErrCodeShortUsername:        http.StatusBadRequest,
 	ErrCodeUnauthorized:         http.StatusUnauthorized,
 	ErrCodeUserDisabled:         http.StatusUnauthorized,
-	ErrCodeUserNotFound:         http.StatusUnauthorized,
-	ErrCodeEmailNotFound:        http.StatusUnauthorized,
+	ErrCodeUserNotFound:         http.StatusBadRequest,
+	ErrCodeEmailNotFound:        http.StatusBadRequest,
 	ErrCodeUsernameAlreadyTaken: http.StatusBadRequest,
 	ErrCodeUsernameRequired:     http.StatusBadRequest,
 	ErrCodeWeakPassword:         http.StatusBadRequest,

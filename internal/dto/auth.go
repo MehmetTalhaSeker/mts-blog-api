@@ -26,5 +26,6 @@ type RegisterRequest struct {
 
 // WithTokenResponse is the response body for the user login endpoint.
 type WithTokenResponse struct {
+	Claims
 	Token string `json:"token"`
 }
