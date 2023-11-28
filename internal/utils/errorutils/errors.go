@@ -50,6 +50,17 @@ var (
 	ErrUserNotFound = errors.New("user not found")
 )
 
+// Post Errors.
+var (
+	ErrPostCount    = errors.New("post count failed")
+	ErrPostCreate   = errors.New("post create failed")
+	ErrPostDelete   = errors.New("post delete failed")
+	ErrPostRead     = errors.New("post read failed")
+	ErrPostReads    = errors.New("post reads failed")
+	ErrPostUpdate   = errors.New("post update failed")
+	ErrPostNotFound = errors.New("post not found")
+)
+
 // Unorganized Errors.
 var (
 	ErrFailedRead        = errors.New("we couldn't read your request. Please try again")
@@ -99,6 +110,15 @@ var errorCodes = map[error]string{
 	ErrUserReads:  ErrCodeUserReads,
 	ErrUserSearch: ErrCodeUserSearch,
 	ErrUserUpdate: ErrCodeUserUpdate,
+
+	// Posts
+	ErrPostCount:    ErrCodePostCount,
+	ErrPostCreate:   ErrCodePostCreate,
+	ErrPostDelete:   ErrCodePostDelete,
+	ErrPostRead:     ErrCodePostRead,
+	ErrPostReads:    ErrCodePostReads,
+	ErrPostUpdate:   ErrCodePostUpdate,
+	ErrPostNotFound: ErrCodePostNotFound,
 
 	// Others
 	ErrFailedRead:        ErrCodeFailedRead,
@@ -167,6 +187,15 @@ var statusCodeMap = map[string]int{
 	ErrCodeUserReads:  http.StatusUnprocessableEntity,
 	ErrCodeUserSearch: http.StatusUnprocessableEntity,
 	ErrCodeUserUpdate: http.StatusUnprocessableEntity,
+
+	// Post
+	ErrCodePostCount:    http.StatusUnprocessableEntity,
+	ErrCodePostCreate:   http.StatusUnprocessableEntity,
+	ErrCodePostDelete:   http.StatusUnprocessableEntity,
+	ErrCodePostRead:     http.StatusUnprocessableEntity,
+	ErrCodePostReads:    http.StatusUnprocessableEntity,
+	ErrCodePostUpdate:   http.StatusUnprocessableEntity,
+	ErrCodePostNotFound: http.StatusNotFound,
 }
 
 // StatusCode gets HTTP status code from error code.

@@ -52,6 +52,17 @@ const (
 	ErrCodeUserNotFound = "user/user-not-found"
 )
 
+// Post Error Codes.
+const (
+	ErrCodePostCount    = "post/count-failed"
+	ErrCodePostCreate   = "post/create-failed"
+	ErrCodePostDelete   = "post/delete-failed"
+	ErrCodePostRead     = "post/read-failed"
+	ErrCodePostReads    = "post/reads-failed"
+	ErrCodePostUpdate   = "post/update-failed"
+	ErrCodePostNotFound = "post/not-found"
+)
+
 // Unorganized Error Codes.
 const (
 	ErrCodeFailedRead        = "un/read-failed"

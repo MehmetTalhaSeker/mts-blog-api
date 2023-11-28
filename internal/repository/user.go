@@ -6,10 +6,10 @@ import (
 )
 
 type User interface {
-	Create(user *model.User) error
+	Create(*model.User) error
 	Read(id uint64) (*model.User, error)
 	ReadByEmail(email string) (*model.User, error)
 	Reads(*pagination.Pageable) (*[]model.User, error)
-	Update(u *model.User) error
-	Delete(i uint64) error
+	Update(*model.User) error
+	Delete(id uint64) error
 }

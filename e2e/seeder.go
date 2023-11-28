@@ -46,3 +46,29 @@ func CreateUserModel(i int, role types.Role) *model.User {
 		EncryptedPassword: ep,
 	}
 }
+
+func CreatePostModels(size int) []*model.Post {
+	posts := make([]*model.Post, size)
+
+	for i := 0; i < size; i++ {
+		posts[i] = CreatePostModel(i)
+	}
+
+	return posts
+}
+
+func CreatePostModel(i int) *model.Post {
+	date := time.Now().Add(-6 * time.Hour).Add(time.Duration(i) * time.Minute)
+
+	return &model.Post{
+		BaseModel: model.BaseModel{
+			ID:        uint64(i + 10),
+			CreatedAt: date,
+			UpdatedAt: date,
+			DeletedAt: nil,
+			Status:    types.Active,
+		},
+		Title: fmt.Sprintf("TITLE-%v", i),
+		Body:  fmt.Sprintf("%v-BODY-BODY-BODY-BODY", i),
+	}
+}

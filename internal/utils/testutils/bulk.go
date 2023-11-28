@@ -73,3 +73,68 @@ func DeleteUsers(db *sql.DB) {
 		log.Fatal(err.Error())
 	}
 }
+
+func InsertPosts(ps []*model.Post, db *sql.DB) {
+	txn, err := db.Begin()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	stmt, err := txn.Prepare(pq.CopyIn("posts", "id", "title", "body", "created_at", "updated_at"))
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	for _, post := range ps {
+		_, err = stmt.Exec(post.ID, post.Title, post.Body, post.CreatedAt, post.UpdatedAt)
+		if err != nil {
+			log.Fatal(err)
+		}
+	}
+
+	_, err = stmt.Exec()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	err = stmt.Close()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	err = txn.Commit()
+	if err != nil {
+		log.Fatal(err)
+	}
+}
+
+func DeletePosts(db *sql.DB) {
+	dcq := "DROP TABLE comments;"
+
+	_, err := db.Exec(dcq)
+	if err != nil {
+		log.Fatalf(err.Error())
+	}
+
+	tuq := "TRUNCATE TABLE posts"
+
+	_, err = db.Exec(tuq)
+	if err != nil {
+		log.Fatalf(err.Error())
+	}
+
+	ctc := `CREATE TABLE IF NOT EXISTS comments (
+    id 				   serial PRIMARY KEY,
+    text 			   varchar(255),
+	author 			   varchar references users(username), 
+	user_id 		   int references users(id),
+	post_id 		   int references posts(id),
+    created_at 		   timestamp,
+    updated_at 		   timestamp
+	)`
+
+	_, err = db.Exec(ctc)
+	if err != nil {
+		log.Fatal(err.Error())
+	}
+}

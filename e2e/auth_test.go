@@ -50,7 +50,7 @@ var _ = Describe("authentication", Ordered, func() {
 			{
 				when:     "valid data",
 				it:       "should succeed",
-				json:     `{ "username": "kamil", "email": "kamil@kamilov.com", "termsOfService": true, "password": "12341234" }`,
+				json:     `{ "username": "samil", "email": "samil@samilov.com", "termsOfService": true, "password": "12341234" }`,
 				wantCode: http.StatusCreated,
 			},
 			{
@@ -68,14 +68,14 @@ var _ = Describe("authentication", Ordered, func() {
 			{
 				when:     "invalid json",
 				it:       "should fail",
-				json:     `{ "username": "kamil", "email": "kamil@kamilov.com", "termsOfService": true, "password": "12341234", }`,
+				json:     `{ "username": "samil", "email": "samil@samilov.com", "termsOfService": true, "password": "12341234", }`,
 				wantCode: http.StatusBadRequest,
 				wantErr:  errorutils.New(errorutils.ErrBinding, nil),
 			},
 			{
 				when:     "termsOfService is false",
 				it:       "should fail",
-				json:     `{ "username": "kamil", "email": "kamil@kamilov.com", "termsOfService": false, "password": "12341234" }`,
+				json:     `{ "username": "samil", "email": "samil@samilov.com", "termsOfService": false, "password": "12341234" }`,
 				wantCode: http.StatusBadRequest,
 				wantErrs: &errorutils.APIErrors{Errors: []*errorutils.APIError{
 					errorutils.New(errorutils.Required("TermsOfService"), nil),
@@ -84,7 +84,7 @@ var _ = Describe("authentication", Ordered, func() {
 			{
 				when:     "empty username",
 				it:       "should fail",
-				json:     `{ "email": "kamil@kamilov.com", "termsOfService": true, "password": "12341234" }`,
+				json:     `{ "email": "samil@samilov.com", "termsOfService": true, "password": "12341234" }`,
 				wantCode: http.StatusBadRequest,
 				wantErrs: &errorutils.APIErrors{Errors: []*errorutils.APIError{
 					errorutils.New(errorutils.Required("Username"), nil),
@@ -93,7 +93,7 @@ var _ = Describe("authentication", Ordered, func() {
 			{
 				when:     "username short",
 				it:       "should fail",
-				json:     `{ "username": "ka", "email": "kamil@kamilov.com", "termsOfService": true, "password": "12341234" }`,
+				json:     `{ "username": "ka", "email": "samil@samilov.com", "termsOfService": true, "password": "12341234" }`,
 				wantCode: http.StatusBadRequest,
 				wantErrs: &errorutils.APIErrors{Errors: []*errorutils.APIError{
 					errorutils.New(errorutils.Min("Username"), nil),
@@ -102,7 +102,7 @@ var _ = Describe("authentication", Ordered, func() {
 			{
 				when:     "username long",
 				it:       "should fail",
-				json:     `{ "username": "kamilkamilkamilkamilkamilkamilkamilkamilkamilkamilkamilkamil", "email": "kamil@kamilov.com", "termsOfService": true, "password": "12341234" }`,
+				json:     `{ "username": "samilsamilsamilsamilsamilsamilsamilsamilsamilsamilsamilsamil", "email": "samil@samilov.com", "termsOfService": true, "password": "12341234" }`,
 				wantCode: http.StatusBadRequest,
 				wantErrs: &errorutils.APIErrors{Errors: []*errorutils.APIError{
 					errorutils.New(errorutils.Max("Username"), nil),
@@ -111,7 +111,7 @@ var _ = Describe("authentication", Ordered, func() {
 			{
 				when:     "empty email",
 				it:       "should fail",
-				json:     `{ "username": "kamil", "termsOfService": true, "password": "12341234" }`,
+				json:     `{ "username": "samil", "termsOfService": true, "password": "12341234" }`,
 				wantCode: http.StatusBadRequest,
 				wantErrs: &errorutils.APIErrors{Errors: []*errorutils.APIError{
 					errorutils.New(errorutils.Required("Email"), nil),
@@ -120,14 +120,14 @@ var _ = Describe("authentication", Ordered, func() {
 			{
 				when:     "same username",
 				it:       "should fail",
-				json:     fmt.Sprintf(`{ "username": "%s", "email": "kamil@kamilov.com", "termsOfService": true, "password": "12341234" }`, user.Username),
+				json:     fmt.Sprintf(`{ "username": "%s", "email": "samil@samilov.com", "termsOfService": true, "password": "12341234" }`, user.Username),
 				wantCode: http.StatusBadRequest,
 				wantErr:  errorutils.New(errorutils.ErrUsernameAlreadyTaken, nil),
 			},
 			{
 				when:     "same email",
 				it:       "should fail",
-				json:     fmt.Sprintf(`{ "username": "kamil", "email": "%s", "termsOfService": true, "password": "12341234" }`, user.Email),
+				json:     fmt.Sprintf(`{ "username": "samil", "email": "%s", "termsOfService": true, "password": "12341234" }`, user.Email),
 				wantCode: http.StatusBadRequest,
 				wantErr:  errorutils.New(errorutils.ErrEmailAlreadyTaken, nil),
 			},
@@ -204,7 +204,7 @@ var _ = Describe("authentication", Ordered, func() {
 			{
 				when:     "invalid json",
 				it:       "should fail",
-				json:     `{ "email": "kamil@kamilov.com", "password": "12341234", }`,
+				json:     `{ "email": "samil@samilov.com", "password": "12341234", }`,
 				wantCode: http.StatusBadRequest,
 				wantErr:  errorutils.New(errorutils.ErrBinding, nil),
 			},
@@ -220,7 +220,7 @@ var _ = Describe("authentication", Ordered, func() {
 			{
 				when:     "empty password",
 				it:       "should fail",
-				json:     `{ "email": "kamil@kamilov.com" }`,
+				json:     `{ "email": "samil@samilov.com" }`,
 				wantCode: http.StatusBadRequest,
 				wantErrs: &errorutils.APIErrors{Errors: []*errorutils.APIError{
 					errorutils.New(errorutils.Required("Password"), nil),
@@ -229,7 +229,7 @@ var _ = Describe("authentication", Ordered, func() {
 			{
 				when:     "non existing user",
 				it:       "should fail",
-				json:     `{ "email": "kamil@kamilov.com", "password": "12341234" }`,
+				json:     `{ "email": "samil@samilov.com", "password": "12341234" }`,
 				wantCode: http.StatusBadRequest,
 				wantErr:  errorutils.New(errorutils.ErrEmailNotFound, nil),
 			},

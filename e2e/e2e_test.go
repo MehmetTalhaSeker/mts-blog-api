@@ -16,6 +16,7 @@ import (
 	"github.com/MehmetTalhaSeker/mts-blog-api/internal/rbac"
 	"github.com/MehmetTalhaSeker/mts-blog-api/internal/utils/testutils"
 	"github.com/MehmetTalhaSeker/mts-blog-api/pkg/auth"
+	"github.com/MehmetTalhaSeker/mts-blog-api/pkg/post"
 	"github.com/MehmetTalhaSeker/mts-blog-api/pkg/user"
 )
 
@@ -34,8 +35,9 @@ var _ = BeforeSuite(func() {
 
 		store.InitDB()
 
-		// initialize db repo.
+		// initialize db repos
 		userRepo := postgresadapter.NewUserRepository(store.GetInstance())
+		postRepo := postgresadapter.NewPostRepository(store.GetInstance())
 
 		e = e2e.InitEcho()
 
@@ -57,6 +59,15 @@ var _ = BeforeSuite(func() {
 			UserRepository: userRepo,
 		}
 		userRouter.New()
+
+		// post router initialization.
+		postRouter := &post.Router{
+			Authenticate:   e2e.AuthMid(),
+			RBAC:           rbac,
+			RouterGroup:    routerGroup,
+			PostRepository: postRepo,
+		}
+		postRouter.New()
 
 		done <- struct{}{}
 		err := e.Start(":8080")

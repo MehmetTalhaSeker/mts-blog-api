@@ -1,0 +1,34 @@
+### Create Post
+POST {{host}}/posts
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "body": "memo@memolov.com",
+  "title": "memo"
+}
+
+### Read Post
+GET {{host}}/posts/11
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+### Reads all Posts
+GET {{host}}/posts?sort=updatedAt,desc&size=100
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+### Edit Post
+PUT {{host}}/posts/15
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "title": "lastOne22",
+  "body": "ABSDGSDGSDAGSDASGDSDGASDGASJHDBKJASBDKJABSDKJHBVASDJVBASDJVASDJGASHJDVKHASVDHASGVDKHASVDHASVDHASVDKHASGVDAHKSG"
+}
+
+### Delete Post
+DELETE {{host}}/posts/1
+Content-Type: application/json
+Authorization: Bearer {{token}}

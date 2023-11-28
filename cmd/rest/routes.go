@@ -11,6 +11,7 @@ import (
 	"github.com/MehmetTalhaSeker/mts-blog-api/internal/utils/errorutils"
 	"github.com/MehmetTalhaSeker/mts-blog-api/internal/utils/validatorutils"
 	"github.com/MehmetTalhaSeker/mts-blog-api/pkg/auth"
+	"github.com/MehmetTalhaSeker/mts-blog-api/pkg/post"
 	"github.com/MehmetTalhaSeker/mts-blog-api/pkg/user"
 )
 
@@ -34,6 +35,14 @@ func (app *application) start() {
 	routerGroup := e.Group("v1")
 
 	ur := postgresadapter.NewUserRepository(app.db)
+	pr := postgresadapter.NewPostRepository(app.db)
+
+	// auth router initialization.
+	authRouter := &auth.Router{
+		RouterGroup:    routerGroup,
+		UserRepository: ur,
+	}
+	authRouter.New()
 
 	// user router initialization.
 	userRouter := &user.Router{
@@ -44,12 +53,14 @@ func (app *application) start() {
 	}
 	userRouter.New()
 
-	// auth router initialization.
-	authRouter := &auth.Router{
+	// user router initialization.
+	postRouter := &post.Router{
+		Authenticate:   app.authenticate(),
+		RBAC:           app.rbac,
 		RouterGroup:    routerGroup,
-		UserRepository: ur,
+		PostRepository: pr,
 	}
-	authRouter.New()
+	postRouter.New()
 
 	e.Logger.Fatal(e.Start(fmt.Sprintf(":%s", app.config.Rest.Port)))
 }

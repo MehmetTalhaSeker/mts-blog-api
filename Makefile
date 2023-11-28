@@ -1,6 +1,3 @@
-E2E_TEST_PKGs := ./pkg/auth,./pkg/user
-E2E_TEST_OUTPUT := e2e_coverage.out
-
 # Run the linter on the specified path
 lint:
 	go mod tidy
@@ -12,9 +9,9 @@ lint:
 	golangci-lint run $(p)
 .PHONY: lint
 
-# Run and cover every tests
-test-cover:
-	find . -type f -name '*_test.go' -exec dirname {} \; | sort -u | xargs go test -cover
+# Run app
+run:
+	go run github.com/MehmetTalhaSeker/mts-blog-api/cmd/rest
 
 # Install linter dependencies
 lint-dep:
@@ -32,11 +29,19 @@ db-down:
 	docker compose stop postgres-db
 	docker compose rm -f postgres-db
 
-# Run tests
-test:
-	find . -type f -name '*_test.go' -not -path './e2e/*' -exec dirname {} \; | sort -u | xargs go test -cover
-	go test -cover -coverpkg=$(E2E_TEST_PKGs) ./e2e
 
+# Run and cover every tests
+test-all:
+	find . -type f -name '*_test.go' -exec dirname {} \; | sort -u | xargs go test -cover
+
+# Run all unit tests and cover
+test-unit:
+	find . -type f -name '*_test.go' -not -path './e2e/*' -exec dirname {} \; | sort -u | xargs go test -cover
+
+E2E_TEST_PKGs := ./pkg/auth,./pkg/user
+E2E_TEST_OUTPUT := e2e_coverage.out
+
+# Run e2e tests and cover
 .PHONY: e2e
 e2e:
 	go test -cover -coverpkg=$(E2E_TEST_PKGs) -coverprofile=$(E2E_TEST_OUTPUT) ./e2e
