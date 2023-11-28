@@ -48,12 +48,12 @@ func (s *service) Create(req *dto.PostCreateRequest) error {
 }
 
 func (s *service) Read(req *dto.RequestWithID) (*dto.PostResponse, error) {
-	uid, err := apputils.StringToUINT64(req.ID)
+	pid, err := apputils.StringToUINT64(req.ID)
 	if err != nil {
 		return nil, errorutils.New(errorutils.ErrInvalidID, err)
 	}
 
-	p, err := s.repository.Read(*uid)
+	p, err := s.repository.Read(*pid)
 	if err != nil {
 		return nil, err
 	}

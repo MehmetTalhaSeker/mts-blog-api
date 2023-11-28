@@ -1,0 +1,20 @@
+### Create Comment
+POST {{host}}/comments
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "text": "777-Memoli comment",
+  "post_id": "13"
+}
+
+### Reads comments by PostID
+GET {{host}}/comments/13?sort=createdAt,desc&size=100
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+
+### Delete Comment
+DELETE {{host}}/comments/5
+Content-Type: application/json
+Authorization: Bearer {{token}}

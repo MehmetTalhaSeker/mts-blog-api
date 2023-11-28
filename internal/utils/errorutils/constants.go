@@ -63,6 +63,16 @@ const (
 	ErrCodePostNotFound = "post/not-found"
 )
 
+// Comment Error Codes.
+const (
+	ErrCodeCommentCount    = "comment/count-failed"
+	ErrCodeCommentCreate   = "comment/create-failed"
+	ErrCodeCommentDelete   = "comment/delete-failed"
+	ErrCodeCommentRead     = "comment/read-failed"
+	ErrCodeCommentReads    = "comment/reads-failed"
+	ErrCodeCommentNotFound = "comment/not-found"
+)
+
 // Unorganized Error Codes.
 const (
 	ErrCodeFailedRead        = "un/read-failed"

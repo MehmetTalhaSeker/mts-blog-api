@@ -105,12 +105,11 @@ func (s postgresStore) createPostsTable() {
 func (s postgresStore) createCommentsTable() {
 	query := `CREATE TABLE IF NOT EXISTS comments (
     id 				   serial PRIMARY KEY,
-    text 			   varchar(255),
 	author 			   varchar references users(username), 
 	user_id 		   int references users(id),
 	post_id 		   int references posts(id),
-    created_at 		   timestamp,
-    updated_at 		   timestamp
+    text 			   varchar(255),
+    created_at 		   timestamp
 	)`
 
 	_, err := s.DB.Exec(query)

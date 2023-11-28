@@ -61,6 +61,16 @@ var (
 	ErrPostNotFound = errors.New("post not found")
 )
 
+// Comment Errors.
+var (
+	ErrCommentCount    = errors.New("comment count failed")
+	ErrCommentCreate   = errors.New("comment create failed")
+	ErrCommentDelete   = errors.New("comment delete failed")
+	ErrCommentRead     = errors.New("comment read failed")
+	ErrCommentReads    = errors.New("comment reads failed")
+	ErrCommentNotFound = errors.New("comment not found")
+)
+
 // Unorganized Errors.
 var (
 	ErrFailedRead        = errors.New("we couldn't read your request. Please try again")
@@ -119,6 +129,14 @@ var errorCodes = map[error]string{
 	ErrPostReads:    ErrCodePostReads,
 	ErrPostUpdate:   ErrCodePostUpdate,
 	ErrPostNotFound: ErrCodePostNotFound,
+
+	// Comments
+	ErrCommentCount:    ErrCodeCommentCount,
+	ErrCommentCreate:   ErrCodeCommentCreate,
+	ErrCommentDelete:   ErrCodeCommentDelete,
+	ErrCommentRead:     ErrCodeCommentRead,
+	ErrCommentReads:    ErrCodeCommentReads,
+	ErrCommentNotFound: ErrCodeCommentNotFound,
 
 	// Others
 	ErrFailedRead:        ErrCodeFailedRead,
@@ -196,6 +214,14 @@ var statusCodeMap = map[string]int{
 	ErrCodePostReads:    http.StatusUnprocessableEntity,
 	ErrCodePostUpdate:   http.StatusUnprocessableEntity,
 	ErrCodePostNotFound: http.StatusNotFound,
+
+	// Comment
+	ErrCodeCommentCount:    http.StatusUnprocessableEntity,
+	ErrCodeCommentCreate:   http.StatusUnprocessableEntity,
+	ErrCodeCommentDelete:   http.StatusUnprocessableEntity,
+	ErrCodeCommentRead:     http.StatusUnprocessableEntity,
+	ErrCodeCommentReads:    http.StatusUnprocessableEntity,
+	ErrCodeCommentNotFound: http.StatusNotFound,
 }
 
 // StatusCode gets HTTP status code from error code.
